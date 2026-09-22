@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Situation</title>
+<meta name="description" content="La Villa Sémaphore est sur la corniche des Maures, entre Cavalaire et le cap Lardier, à trente minutes de Saint-Tropez et six minutes de la plage de Gigaro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=12">
+</head>
+<body class="page papier">
+
+<header class="barre">
+  <a class="nom" href="./"><span class="pavillon" aria-hidden="true"></span>Villa Sémaphore</a>
+  <nav aria-label="Pages">
+    <a href="./">La visite</a>
+    <a href="villa.html">La villa</a>
+    <a href="prestations.html">Prestations</a>
+    <a href="situation.html" aria-current="page">Situation</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <div class="droite">
+    <a class="rond" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
+    <a class="rond" href="mailto:contact@villa-semaphore.fr" aria-label="Écrire"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></a>
+    <a class="rond" href="situation.html" aria-label="Situation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
+    <a class="tel" href="tel:+33494000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>04 94 00 00 00</span></a>
+  </div>
+</header>
+
+<section class="entete">
+  <figure class="dessin">
+    <img class="photo" src="planches/f0204.webp" alt="Le bord du bassin à débordement, l'eau qui rejoint la mer et la côte en face">
+    <img class="croquis" src="planches/f0204-croquis.webp" alt="" aria-hidden="true">
+  </figure>
+  <div class="titre">
+    <h1>Sur la corniche, entre Cavalaire et le cap Lardier</h1>
+    <p>La côte la plus sauvage du golfe, celle des criques et des sentiers de douaniers. Saint-Tropez est à trente minutes, la plage à six, et le premier voisin à cinq cents mètres.</p>
+  </div>
+</section>
+
+<main class="corps" data-fond="clair">
+  <section class="bloc large">
+    <figure class="image" aria-labelledby="carte-titre">
+      <!-- Une carte au trait du golfe, dessinee a la main, comme le reste.
+           Les positions sont schematiques. -->
+      <svg class="carte" viewBox="0 0 800 520" role="img" aria-describedby="carte-desc">
+        <title id="carte-titre">Le golfe de Saint-Tropez, schéma</title>
+        <desc id="carte-desc">La villa est sur la côte sud de la presqu'île, entre Cavalaire-sur-Mer et le cap Lardier. Saint-Tropez est au nord-est, Sainte-Maxime en face de l'autre côté du golfe.</desc>
+        <rect class="mer" x="0" y="0" width="800" height="520"/>
+        <path class="terre trait" d="M0 0 L540 0 L540 26 C500 50 470 70 440 90 C420 100 405 112 388 118 C360 130 338 156 322 190 C318 202 328 214 346 222 C380 228 410 220 432 208 C452 198 470 182 484 178 C500 176 512 184 508 200 C520 226 522 250 512 282 C504 318 492 356 478 392 C474 414 464 428 450 426 C428 420 412 434 396 434 C378 428 364 410 346 404 C324 412 310 436 292 446 C270 440 252 420 236 408 C214 398 190 386 166 380 C146 380 132 392 116 400 C92 412 60 420 0 428 Z"/>
+        <!-- les routes -->
+        <path class="route" d="M208 372 C240 350 300 330 340 300 C380 270 420 230 468 190"/>
+        <path class="route" d="M208 372 C190 366 176 372 162 376"/>
+        <path class="route" d="M340 300 C330 260 326 230 322 196"/>
+        <!-- les villes -->
+        <g>
+          <circle cx="166" cy="380" r="2.6" fill="currentColor"/><text x="150" y="366" text-anchor="middle">Cavalaire-sur-Mer</text>
+          <circle cx="292" cy="446" r="2.6" fill="currentColor"/><text x="292" y="466" text-anchor="middle">cap Lardier</text>
+          <circle cx="396" cy="434" r="2.6" fill="currentColor"/><text x="396" y="454" text-anchor="middle">cap Taillat</text>
+          <circle cx="478" cy="392" r="2.6" fill="currentColor"/><text x="498" y="396">Cap Camarat</text>
+          <circle cx="504" cy="318" r="2.6" fill="currentColor"/><text x="524" y="322">Pampelonne</text>
+          <circle cx="484" cy="178" r="2.6" fill="currentColor"/><text x="500" y="172">Saint-Tropez</text>
+          <circle cx="322" cy="196" r="2.6" fill="currentColor"/><text x="230" y="200">Port-Grimaud</text>
+          <circle cx="388" cy="118" r="2.6" fill="currentColor"/><text x="404" y="112">Sainte-Maxime</text>
+          <circle cx="236" cy="336" r="2.6" fill="currentColor"/><text x="236" y="328" text-anchor="middle">La Croix-Valmer</text>
+          <circle cx="236" cy="408" r="2.6" fill="currentColor"/><text x="236" y="428" text-anchor="middle">Gigaro</text>
+        </g>
+        <!-- la villa -->
+        <g>
+          <circle class="ici" cx="208" cy="386" r="6"/>
+          <circle class="trait" cx="208" cy="386" r="13"/>
+          <text class="ici-texte" x="208" y="352" text-anchor="middle">Villa Sémaphore</text>
+        </g>
+        <text x="680" y="500" text-anchor="end">Méditerranée</text>
+        <text x="40" y="40">massif des Maures</text>
+      </svg>
+    </figure>
+    <div class="texte">
+      <h2>Le golfe est à vingt minutes, la côte sauvage à vos pieds</h2>
+      <p>La villa regarde le sud, vers le large et la côte des Maures qui se prolonge vers Le Lavandou. Derrière elle, la colline et le sentier du littoral qui rejoint Gigaro et les criques du cap Lardier. Saint-Tropez, Ramatuelle et Pampelonne sont de l'autre côté de la presqu'île, par la route de La Croix-Valmer.</p>
+    </div>
+  </section>
+
+  <section class="bloc">
+    <div class="texte">
+      <h2>Les temps de route</h2>
+      <table class="faits">
+        <tr><th scope="row">Plage de Gigaro</th><td>6 min, à pied par le sentier</td></tr>
+        <tr><th scope="row">Cavalaire-sur-Mer, port et marché</th><td>8 min</td></tr>
+        <tr><th scope="row">La Croix-Valmer</th><td>10 min</td></tr>
+        <tr><th scope="row">Pampelonne</th><td>25 min</td></tr>
+        <tr><th scope="row">Saint-Tropez</th><td>30 min, ou 20 min en bateau</td></tr>
+        <tr><th scope="row">Aérodrome de La Môle</th><td>20 min</td></tr>
+        <tr><th scope="row">Aéroport de Toulon-Hyères</th><td>55 min</td></tr>
+        <tr><th scope="row">Gare de Saint-Raphaël</th><td>55 min</td></tr>
+        <tr><th scope="row">Aéroport de Nice</th><td>1 h 45</td></tr>
+      </table>
+    </div>
+    <figure class="image">
+      <div class="dessin paysage">
+        <img class="photo" src="planches/cour.webp" alt="La cour de gravier au pied de l'escalier, les murs de pierre sèche et la maison au-dessus">
+        <img class="croquis" src="planches/cour-croquis.webp" alt="" aria-hidden="true">
+      </div>
+      <figcaption>La cour, où l'on laisse les voitures. Quatre places.</figcaption>
+    </figure>
+  </section>
+
+  <section class="bloc inverse">
+    <div class="texte">
+      <h2>Ce qu'on fait depuis la maison</h2>
+      <p>Le sentier du littoral part du bas du terrain et longe la mer jusqu'au cap Lardier, deux heures de marche entre pins et roche, avec des criques où personne ne vient. Le marché de Cavalaire est le mercredi et le samedi matin. Les vignobles de Ramatuelle et de La Croix-Valmer se visitent à vélo par les chemins de vigne.</p>
+      <p>Pour Saint-Tropez, le bateau depuis le port de Cavalaire évite la route de l'été et arrive au pied de la place aux Herbes.</p>
+    </div>
+    <figure class="image">
+      <div class="dessin paysage">
+        <img class="photo" src="planches/f0060.webp" alt="Survol du flanc de la villa, les cyprès et les pins au-dessus de la mer">
+        <img class="croquis" src="planches/f0060-croquis.webp" alt="" aria-hidden="true">
+      </div>
+      <figcaption>Le flanc est du promontoire, depuis la mer.</figcaption>
+    </figure>
+  </section>
+</main>
+
+<section class="nuit" data-fond="sombre">
+  <div class="bloc">
+    <div class="texte">
+      <h2>L'adresse exacte se donne à la réservation</h2>
+      <p>La maison n'est pas visible depuis la route et n'apparaît pas sur les cartes. Nous vous envoyons l'itinéraire et le code du portail la semaine de votre arrivée.</p>
+      <p style="margin-top:28px"><a class="bouton" href="contact.html">Demander une visite</a></p>
+    </div>
+  </div>
+  <footer class="pied">
+    <span>Villa Sémaphore, golfe de Saint-Tropez</span>
+    <span>Villa imaginaire, modélisée en 3D. Une démonstration <a href="https://weboost-studio.fr">Weboost Studio</a>.</span>
+  </footer>
+</section>
+
+<script src="site.js?v=12"></script>
+<script src="anime.js?v=12"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact</title>
+<meta name="description" content="Demander une visite ou des dates à la Villa Sémaphore. Nous répondons dans la journée.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=12">
+<style>
+  /* La page contact est courte : l'en-tete prend la moitie de l'ecran, le
+     formulaire est dans la nuit, juste dessous. */
+  .entete.court { min-height: calc(var(--ecran, 100svh) * 0.62); }
+  .nuit .bloc.contact > .texte { grid-column: 1 / span 4; }
+  .nuit .bloc.contact > .formulaire { grid-column: 6 / span 7; }
+  @media (max-width: 900px) {
+    .nuit .bloc.contact > .texte, .nuit .bloc.contact > .formulaire { grid-column: 1 / -1; }
+  }
+  .coordonnees { list-style: none; margin-top: 28px; font-size: 0.95rem; }
+  .coordonnees li { padding: 12px 0; border-bottom: 1px solid rgba(243, 239, 231, 0.18); }
+  .coordonnees li a { color: var(--papier); text-decoration: none; }
+</style>
+</head>
+<body class="page papier">
+
+<header class="barre">
+  <a class="nom" href="./"><span class="pavillon" aria-hidden="true"></span>Villa Sémaphore</a>
+  <nav aria-label="Pages">
+    <a href="./">La visite</a>
+    <a href="villa.html">La villa</a>
+    <a href="prestations.html">Prestations</a>
+    <a href="situation.html">Situation</a>
+    <a href="contact.html" aria-current="page">Contact</a>
+  </nav>
+  <div class="droite">
+    <a class="rond" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
+    <a class="rond" href="mailto:contact@villa-semaphore.fr" aria-label="Écrire"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></a>
+    <a class="rond" href="situation.html" aria-label="Situation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
+    <a class="tel" href="tel:+33494000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>04 94 00 00 00</span></a>
+  </div>
+</header>
+
+<section class="entete court">
+  <figure class="dessin">
+    <img class="photo" src="planches/f0116.webp" alt="L'arrivée dans la cour, la maison au-dessus du mur de pierres sèches, le soleil bas">
+    <img class="croquis" src="planches/f0116-croquis.webp" alt="" aria-hidden="true">
+  </figure>
+  <div class="titre">
+    <h1>Venez la voir</h1>
+    <p>Une visite se fait sur place, avec la conciergerie, ou en direct par appel vidéo depuis la terrasse. Dites-nous ce qui vous convient.</p>
+  </div>
+</section>
+
+<section class="nuit" data-fond="sombre">
+  <div class="bloc contact">
+    <div class="texte">
+      <h2>Nous répondons dans la journée</h2>
+      <ul class="coordonnees">
+        <li><a href="mailto:contact@villa-semaphore.fr">contact@villa-semaphore.fr</a></li>
+        <li><a href="tel:+33494000000">04 94 00 00 00</a>, de 9 h à 19 h</li>
+        <li>Corniche des Maures, 83240 Cavalaire-sur-Mer</li>
+      </ul>
+    </div>
+    <form class="demande formulaire" action="#" method="post" novalidate>
+      <div class="champ">
+        <label for="nom">Votre nom</label>
+        <input id="nom" name="nom" type="text" autocomplete="name" required>
+      </div>
+      <div class="champ">
+        <label for="email">Votre adresse e-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="champ">
+        <label for="arrivee">Arrivée souhaitée</label>
+        <input id="arrivee" name="arrivee" type="date">
+      </div>
+      <div class="champ">
+        <label for="depart">Départ</label>
+        <input id="depart" name="depart" type="date">
+      </div>
+      <div class="champ long">
+        <label for="message">Ce que vous imaginez pour ce séjour</label>
+        <textarea id="message" name="message" rows="4"></textarea>
+      </div>
+      <div class="envoi">
+        <button class="bouton plein" type="submit">Envoyer la demande</button>
+        <p class="note">Ce formulaire est une démonstration, il n'envoie rien pour l'instant.</p>
+      </div>
+    </form>
+  </div>
+  <footer class="pied">
+    <span>Villa Sémaphore, golfe de Saint-Tropez</span>
+    <span>Villa imaginaire, modélisée en 3D. Une démonstration <a href="https://weboost-studio.fr">Weboost Studio</a>.</span>
+  </footer>
+</section>
+
+<script src="site.js?v=12"></script>
+<script src="anime.js?v=12"></script>
+</body>
+</html>

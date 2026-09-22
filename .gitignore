@@ -1,0 +1,5 @@
+# Rien de lourd ni de prive ici : ce depot ne contient que le site publie.
+# Le dossier est genere par projects/villa-3d/publier.py depuis le workspace.
+.DS_Store
+Thumbs.db
+desktop.ini

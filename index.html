@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Villa Sémaphore</title>
+<meta name="description" content="Une villa face au golfe de Saint-Tropez : un croquis d'architecte prend couleur pendant le survol, on entre par la porte, on traverse le salon et on finit au bord du bassin, en faisant défiler la page. Démonstration Weboost Studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=12">
+<style>
+  :root{
+    --dim:rgba(255,255,255,.62);
+    /* La phase croquis : encre graphite et sienne sur le papier creme */
+    --ink:#3a2e24; --ink-dim:#8a7d6c; --sienna:#8a5a3c;
+    /* Le halo de papier qui degage les textes des traits du dessin */
+    --halo:0 0 1px var(--papier), 0 0 6px var(--papier), 0 0 14px var(--papier), 0 0 28px var(--papier), 0 0 48px var(--papier);
+  }
+  html{ scroll-behavior:auto }
+  body{ overflow-x:clip }
+  /* La visite : un bloc haut de 2000svh, et dedans un ecran d'une hauteur
+     de fenetre, colle en haut tant que le bloc defile. Quand le bloc est
+     passe, l'ecran remonte avec lui et le reste du site arrive. L'ecran
+     est une carte arrondie posee sur la page, avec une marge autour. */
+  .visite{ position:relative; height:2000svh; z-index:1 }
+  .suite-site{ position:relative; z-index:2; background:var(--page) }
+  .ecran{ position:sticky; top:0; height:100svh; padding:var(--marge); background:var(--page); transition:background .8s }
+  .papier .ecran{ background:var(--papier) }
+  .cadre{ position:relative; height:100%; border-radius:var(--rayon); overflow:hidden; background:#0a0907; transform:translateZ(0) }
+  #stage{ position:absolute; inset:0; width:100%; height:100%; display:block; z-index:0 }
+
+  /* Les petits textes des coins, en bas */
+  .coins{
+    position:absolute; left:var(--pad); right:var(--pad); bottom:calc(20px + env(safe-area-inset-bottom, 0px)); z-index:10;
+    display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+    font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dim);
+    pointer-events:none; text-shadow:0 1px 14px rgba(0,0,0,.6); transition:color .8s, text-shadow .8s; line-height:1.5;
+  }
+  .coins > span{ max-width:22ch }
+  .coins .fin{ text-align:right; display:grid; justify-items:end; gap:8px }
+  .coins .progress{ position:relative; width:min(180px,32vw); height:1px; background:rgba(255,255,255,.22); transition:background .8s }
+  .coins .progress i{ position:absolute; inset:0 auto 0 0; width:0; background:#fff; transition:background .8s }
+  .coins .progress b{ position:absolute; inset:0 auto 0 0; width:0; background:rgba(255,255,255,.3) }
+
+  .beats{ position:absolute; inset:0; z-index:5; pointer-events:none }
+  .beat{
+    position:absolute; inset:0; display:grid; align-content:end; justify-items:start;
+    padding:0 var(--pad) calc(96px + env(safe-area-inset-bottom, 0px)); opacity:0;
+  }
+  .beat.center{ align-content:center; justify-items:center; text-align:center; padding-bottom:0 }
+  .beat h2{
+    font-family:var(--serif); font-weight:400; color:#fff;
+    font-size:clamp(2.6rem,7vw,6rem); line-height:.96; letter-spacing:-.01em;
+    text-shadow:0 2px 40px rgba(0,0,0,.7); transition:color .8s, text-shadow .8s;
+  }
+  .beat h2 em{ font-style:italic; color:#fff; transition:color .8s }
+  .beat p{
+    max-width:36ch; margin-top:16px; line-height:1.6; font-size:clamp(.9rem,1.3vw,1rem);
+    color:rgba(255,255,255,.86); text-shadow:0 2px 24px rgba(0,0,0,.8); transition:color .8s, text-shadow .8s;
+  }
+  .beat .bouton{ pointer-events:auto; margin-top:28px; background:#fff; border-color:#fff; color:var(--encre) }
+  .beat .bouton:hover{ background:#e9e7e2; border-color:#e9e7e2 }
+
+  /* Le premier ecran, dans la structure de la reference : l'accroche en
+     haut a gauche, le mot SEMAPHORE sur toute la largeur, deux cartes de
+     chiffres en verre a droite, la pilule en bas au centre. Le mot reste
+     pose pendant tout le vol, encre sur le croquis puis blanc sur la
+     photo, et s'efface quand on se pose sur l'allee. */
+  .beat.hero, .beat.marque-beat{ display:block; padding:0; color:#fff }
+  .hero .accroche{
+    position:absolute; left:var(--pad); top:clamp(92px, 13vh, 126px); max-width:min(44vw, 20ch);
+    font-weight:300; font-size:clamp(1.05rem, 2.1vw, 1.85rem); line-height:1.12; letter-spacing:.02em; text-transform:uppercase;
+    text-shadow:0 1px 20px rgba(0,0,0,.45); transition:color .8s, text-shadow .8s;
+  }
+  .hero .accroche small{ display:block; margin-bottom:14px; font-size:.66rem; letter-spacing:.1em; font-weight:400; color:var(--dim) }
+  .hero .accroche .sous{ display:block; margin-top:14px; font-size:.66rem; letter-spacing:.06em; text-transform:none; font-weight:400; color:var(--dim); max-width:30ch; line-height:1.5 }
+  .hero .repere{ position:absolute; right:var(--pad); top:clamp(92px, 13vh, 126px); text-align:right; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); line-height:1.5; transition:color .8s }
+  .marque{
+    position:absolute; left:var(--pad); right:var(--pad); top:37%;
+    font-family:var(--serif); font-weight:400; line-height:.8; letter-spacing:.01em; white-space:nowrap; text-transform:uppercase;
+    color:#fff; opacity:.94; text-shadow:0 4px 60px rgba(0,0,0,.25); transition:color .8s, text-shadow .8s;
+  }
+  .marque span{ display:inline-block; vertical-align:top }
+  .hero .chiffre{
+    position:absolute; width:min(250px, 40vw); padding:20px 22px 22px; border-radius:20px;
+    background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.3);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    transition:background .8s, border-color .8s, color .8s;
+  }
+  .hero .chiffre b{ display:block; font-family:var(--serif); font-weight:400; font-size:clamp(2rem, 3.4vw, 3rem); line-height:1 }
+  .hero .chiffre span{ display:block; margin-top:12px; font-size:.74rem; line-height:1.5; color:rgba(255,255,255,.8); transition:color .8s }
+  .hero .chiffre.un{ right:calc(var(--pad) + min(280px, 22vw)); top:58% }
+  .hero .chiffre.deux{ right:var(--pad); top:71% }
+  .hero .entree{
+    position:absolute; left:50%; bottom:calc(52px + env(safe-area-inset-bottom, 0px)); transform:translateX(-50%);
+    pointer-events:auto; background:#fff; border-color:#fff; color:var(--encre); padding:14px 26px;
+    transition:background .3s, color .8s, border-color .8s;
+  }
+  .hero .entree:hover{ background:#e9e7e2; border-color:#e9e7e2 }
+  @media (max-width:900px){
+    .hero .accroche{ max-width:min(70vw, 22ch); top:clamp(128px, 20vh, 170px) }
+    .hero .repere{ display:none }
+    .marque{ top:44% }
+    .hero .chiffre{ width:auto; padding:12px 14px 14px; border-radius:14px }
+    .hero .chiffre b{ font-size:1.6rem }
+    .hero .chiffre span{ margin-top:6px; font-size:.66rem; max-width:16ch }
+    .hero .chiffre.un{ right:auto; left:var(--pad); top:auto; bottom:calc(120px + env(safe-area-inset-bottom, 0px)) }
+    .hero .chiffre.deux{ top:auto; bottom:calc(120px + env(safe-area-inset-bottom, 0px)) }
+    .coins > span:first-child{ display:none }
+  }
+
+  /* Tant que la villa est un dessin, la page est une feuille : encre
+     sombre, et un halo de papier sous chaque texte pour qu'il se detache
+     des traits. */
+  .papier .coins{ color:var(--ink-dim); text-shadow:var(--halo) }
+  .papier .coins .progress{ background:rgba(58,46,36,.16) }
+  .papier .coins .progress i{ background:var(--sienna) }
+  .papier .beat h2{ color:var(--ink); text-shadow:var(--halo) }
+  .papier .beat h2 em{ color:var(--sienna) }
+  .papier .beat p{ color:#4a3e33; text-shadow:var(--halo) }
+  .papier .hero{ color:var(--ink) }
+  .papier .hero .accroche{ text-shadow:var(--halo) }
+  .papier .hero .accroche small, .papier .hero .accroche .sous, .papier .hero .repere{ color:var(--ink-dim) }
+  .papier .marque{ color:var(--ink); text-shadow:none }
+  .papier .hero .chiffre{ background:rgba(243,239,231,.55); border-color:rgba(58,46,36,.2) }
+  .papier .hero .chiffre span{ color:var(--ink-dim) }
+  .papier .hero .entree{ background:var(--ink); border-color:var(--ink); color:var(--papier) }
+
+  /* Le grain du papier, pose par-dessus le dessin et retire avec lui */
+  #grain{
+    position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0; transition:opacity 1.2s;
+    mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .4 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+  .papier #grain{ opacity:.28 }
+
+  .state{
+    position:fixed; inset:0; z-index:40; display:grid; place-items:center;
+    padding:var(--pad); text-align:center; background:var(--papier); color:var(--ink); transition:opacity .9s;
+  }
+  .state[hidden]{ display:none }
+  .state .inner{ max-width:52ch }
+  .state h1{ font-size:clamp(2rem,5vw,3.4rem); line-height:1.1; margin-bottom:14px }
+  .state p{ color:var(--ink-dim); line-height:1.75; font-size:.9rem }
+  .bar{ width:min(260px,60vw); height:1px; background:rgba(58,46,36,.16); margin:28px auto 0 }
+  .bar i{ display:block; height:100%; width:0; background:var(--sienna); transition:width .25s }
+</style>
+</head>
+<body class="papier">
+
+<header class="barre">
+  <a class="nom" href="./"><span class="pavillon" aria-hidden="true"></span>Villa Sémaphore</a>
+  <nav aria-label="Pages">
+    <a href="./" aria-current="page">La visite</a>
+    <a href="villa.html">La villa</a>
+    <a href="prestations.html">Prestations</a>
+    <a href="situation.html">Situation</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <div class="droite">
+    <a class="rond" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
+    <a class="rond" href="mailto:contact@villa-semaphore.fr" aria-label="Écrire"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></a>
+    <a class="rond" href="situation.html" aria-label="Situation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
+    <a class="tel" href="tel:+33494000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>04 94 00 00 00</span></a>
+  </div>
+</header>
+
+<div class="visite" id="visite">
+<div class="ecran">
+<div class="cadre" id="cadre">
+<canvas id="stage"></canvas>
+<div id="grain"></div>
+<div class="coins"><span>Villa imaginaire, dessinée puis rendue en 3D. Une démonstration Weboost Studio.</span><span class="fin"><span class="progress"><b id="loaded"></b><i id="prog"></i></span>Au fil du scroll</span></div>
+
+<div class="beats">
+  <div class="beat marque-beat" data-in="0.00" data-out="0.38">
+    <h1 class="marque"><span id="marque">Sémaphore</span></h1>
+  </div>
+  <div class="beat hero" data-in="0.00" data-out="0.10">
+    <p class="accroche"><small>Location à la semaine</small>Une villa seule face au golfe de Saint-Tropez<span class="sous">Sur la corniche, entre Cavalaire et le cap Lardier. On arrive du large.</span></p>
+    <p class="repere">Corniche des Maures<br>Var, France</p>
+    <div class="chiffre un"><b>320 m²</b><span>de pierre claire et de verre, sur un promontoire de garrigue que rien ne surplombe.</span></div>
+    <div class="chiffre deux"><b>12 m</b><span>de bassin à débordement, cent quatre-vingts degrés sur le golfe.</span></div>
+    <a class="bouton entree" href="#visite" id="entree">Découvrir la villa<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+  </div>
+  <div class="beat" data-in="0.15" data-out="0.27">
+    <h2>Sur la <em>corniche</em></h2>
+    <p>La maison est posée sur sa dalle de roche, entre les pins et les cyprès. Le bassin touche l'horizon.</p>
+  </div>
+  <div class="beat" data-in="0.43" data-out="0.57">
+    <h2>L'<em>arrivée</em></h2>
+    <p>Une allée de cyprès, une cour de gravier deux mètres sous la maison. Douze marches de pierre dans l'axe de la porte, laissée ouverte.</p>
+  </div>
+  <div class="beat" data-in="0.775" data-out="0.87">
+    <h2>Une seule <em>pièce à vivre</em></h2>
+    <p>Dix-sept mètres de baie, du sol au plafond. On traverse, la mer au bout.</p>
+  </div>
+  <div class="beat center" data-in="0.955" data-out="1.00">
+    <h2>Et la <em>mer</em></h2>
+    <p>Bassin à débordement, cent quatre-vingts degrés sur le golfe. Deux chambres à l'étage, une terrasse qui ne s'arrête qu'à l'eau.</p>
+    <a class="bouton" href="contact.html">Demander une visite<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Le reste du site, sur la meme page, une fois la visite passee -->
+<main class="suite-site corps" data-fond="clair">
+
+  <section class="section centre presentation">
+    <h2>Une maison posée sur la roche, face au large</h2>
+    <div class="trois">
+      <div class="colonne">
+        <h3>Trois cents vingt mètres carrés de pierre claire et de verre</h3>
+        <p>Sur un promontoire de garrigue que rien ne surplombe. Le rez-de-chaussée est une pièce unique, du salon à la cuisine, ouverte sur dix-sept mètres par une baie du sol au plafond. Deux chambres à l'étage, chacune sa porte-fenêtre sur la mer.</p>
+        <a class="bouton" href="villa.html">La villa en détail</a>
+        <p class="mention">Avec la conciergerie :</p>
+        <ul class="partenaires"><li>Caviste de Saint-Tropez</li><li>Chef à la maison</li><li>Skipper</li></ul>
+      </div>
+      <figure class="image">
+        <div class="dessin portrait">
+          <img class="photo" src="planches/bassin.webp" alt="La villa entière derrière son bassin, depuis le bout de la terrasse" loading="lazy">
+          <img class="croquis" src="planches/bassin-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+        </div>
+      </figure>
+      <div class="colonne">
+        <div class="point">
+          <h4>Une seule pièce à vivre</h4>
+          <p>Dix-sept mètres de baie coulissante, le sol de travertin qui continue dehors sans marche, la mer au bout.</p>
+        </div>
+        <div class="point">
+          <h4>Deux chambres sur la mer</h4>
+          <p>À l'étage, chacune sa salle de bains en travertin et sa porte-fenêtre. Quatre personnes au plus.</p>
+        </div>
+        <div class="point">
+          <h4>La maison est prête quand vous arrivez</h4>
+          <p>Lits faits, cave pleine, bassin à vingt-huit degrés. Conciergerie de huit heures à minuit.</p>
+        </div>
+        <p class="mention">Les séjours :</p>
+        <div class="avis">
+          <span class="avatars"><span>CL</span><span>MB</span><span>AR</span><span>+38</span></span>
+          <div><b>4,9</b><small>Note des séjours, 41 avis</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bande-nuit" data-fond="sombre">
+    <div class="dedans">
+      <div class="espaces">
+        <figure>
+          <div class="dessin">
+            <img class="photo" src="planches/salon.webp" alt="La pièce à vivre vue depuis la porte d'entrée, la mer au bout de la baie" loading="lazy">
+            <img class="croquis" src="planches/salon-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+          </div>
+          <figcaption>La pièce à vivre<small>Dix-sept mètres de baie</small></figcaption>
+        </figure>
+        <figure>
+          <div class="dessin">
+            <img class="photo" src="planches/chambre-mer.webp" alt="La chambre principale, le lit face à la porte-fenêtre ouverte sur la mer" loading="lazy">
+            <img class="croquis" src="planches/chambre-mer-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+          </div>
+          <figcaption>La chambre principale<small>Une porte-fenêtre sur la mer</small></figcaption>
+        </figure>
+        <figure>
+          <div class="dessin">
+            <img class="photo" src="planches/terrasse.webp" alt="La terrasse et le bassin à débordement, deux bains de soleil devant la mer" loading="lazy">
+            <img class="croquis" src="planches/terrasse-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+          </div>
+          <figcaption>La terrasse<small>Cent quatre-vingts mètres carrés, plein sud</small></figcaption>
+        </figure>
+      </div>
+      <div class="texte">
+        <h2>Les espaces de la villa</h2>
+        <p>Une pièce à vivre ouverte sur toute sa longueur, deux chambres qui regardent la mer, une terrasse qui ne s'arrête qu'à l'eau. Chaque vue est dessinée avant d'être photographiée, les deux sortent de la même maquette.</p>
+        <a class="bouton" href="villa.html">Voir la villa<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section saisons">
+    <div class="tete">
+      <h2>Choisissez votre semaine</h2>
+      <p>La villa se loue à la semaine, du samedi au samedi, pour quatre personnes au plus. Les dates se demandent, nous répondons dans la journée avec la disponibilité et le tarif de la période.</p>
+    </div>
+    <div class="cartes">
+      <a class="carte-semaine" href="contact.html">
+        <div class="dessin">
+          <span class="etiquette-image">Disponible</span>
+          <img class="photo" src="planches/arrivee.webp" alt="L'allée de cyprès qui mène à la villa" loading="lazy">
+          <img class="croquis" src="planches/arrivee-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+        </div>
+        <div class="ligne-carte"><strong>Hors saison</strong><span>4 500 €</span></div>
+        <p class="sous">Novembre à mars, la semaine</p>
+      </a>
+      <a class="carte-semaine" href="contact.html">
+        <div class="dessin">
+          <span class="etiquette-image">Disponible</span>
+          <img class="photo" src="planches/table.webp" alt="La cuisine de noyer, l'îlot et l'escalier vers les chambres" loading="lazy">
+          <img class="croquis" src="planches/table-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+        </div>
+        <div class="ligne-carte"><strong>Été</strong><span>12 000 €</span></div>
+        <p class="sous">Juillet et août, la semaine</p>
+      </a>
+      <a class="carte-semaine" href="contact.html">
+        <div class="dessin">
+          <span class="etiquette-image">Disponible</span>
+          <img class="photo" src="planches/sejour.webp" alt="La pièce à vivre depuis la cuisine, les suspensions allumées" loading="lazy">
+          <img class="croquis" src="planches/sejour-croquis.webp" alt="" aria-hidden="true" loading="lazy">
+        </div>
+        <div class="ligne-carte"><strong>Printemps et automne</strong><span>7 500 €</span></div>
+        <p class="sous">Avril à juin, septembre et octobre</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="pied-page" data-fond="sombre">
+  <div class="appel">
+    <div>
+      <h2>Les dates se demandent</h2>
+      <p>Dites-nous quand vous voulez venir et combien vous serez. Nous répondons dans la journée, avec la disponibilité et le tarif de la période.</p>
+    </div>
+    <a class="bouton" href="contact.html">Demander des dates<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+  </div>
+  <div class="lignes">
+    <div>
+      <a class="nom" href="./"><span class="pavillon" aria-hidden="true"></span>Villa Sémaphore</a>
+      <p>Corniche des Maures, 83240 Cavalaire-sur-Mer. Sur la côte sud de la presqu'île, entre Cavalaire et le cap Lardier.</p>
+    </div>
+    <div>
+      <h5>Pages</h5>
+      <ul><li><a href="villa.html">La villa</a></li><li><a href="prestations.html">Prestations</a></li><li><a href="situation.html">Situation</a></li><li><a href="contact.html">Contact</a></li></ul>
+    </div>
+    <div>
+      <h5>Conciergerie</h5>
+      <ul><li><a href="mailto:contact@villa-semaphore.fr">contact@villa-semaphore.fr</a></li><li><a href="tel:+33494000000">04 94 00 00 00</a></li><li>De 9 h à 19 h, tous les jours</li></ul>
+    </div>
+  </div>
+  <div class="bas">
+    <span>Villa Sémaphore, golfe de Saint-Tropez</span>
+    <span>Villa imaginaire, modélisée en 3D. Une démonstration <a href="https://weboost-studio.fr">Weboost Studio</a>.</span>
+  </div>
+</footer>
+
+<div class="state" id="state">
+  <div class="inner">
+    <h1 id="stateTitle">Villa Sémaphore</h1>
+    <p id="stateBody">La visite se prépare. Le croquis se charge, le reste suivra pendant le vol.</p>
+    <div class="bar" id="bar"><i></i></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Deux cent vingt images, du vol au-dessus de la mer au bord du bassin :
+  // survol de la villa, allee, porte, salon traverse en ligne droite,
+  // rendues depuis la maquette 3D. Le scroll avance ou recule dans la
+  // sequence.
+  //
+  // La visite s'ouvre sur un croquis au trait, tire de la meme maquette
+  // (Freestyle), et prend couleur pendant le vol comme un dessin
+  // d'architecte : d'abord le trait, puis un lavis monochrome qui donne
+  // les volumes, puis la couleur, et les traits s'effacent en dernier. Au
+  // moment de se poser sur l'allee, la villa est la.
+  var COUNT = 220;
+  // Les images de `images/` sont passees par photo.py (grain, vignettage,
+  // lueur, aberration, contraste doux). `?brut=1` montre les rendus tels
+  // que Blender les a sortis, pour comparer.
+  var PARAMS = new URLSearchParams(location.search);
+  var DIR   = PARAMS.get('brut') ? 'images-brut/' : 'images/';
+  var EXT   = '.webp';
+  var SKETCH = 88;          // croquis disponibles, du depart a l'allee
+  var SDIR   = 'dessin/';
+  var LAVIS   = [0.06, 0.20];   // le lavis monte
+  var COULEUR = [0.19, 0.34];   // la couleur vient
+  var TRAITS  = [0.27, 0.385];  // les traits s'effacent
+  var START_AT = 24;        // fichiers charges avant de laisser partir
+  var PARALLEL = 6;         // chargements simultanes, dans l'ordre du chemin
+  var INTRO_MS = 2600;      // le dessin se trace a l'ouverture
+
+  var cadre  = document.getElementById('cadre');
+  var canvas = document.getElementById('stage');
+  var ctx    = canvas.getContext('2d', { alpha: false });
+  var state  = document.getElementById('state');
+  var fill   = document.querySelector('.bar i');
+  var prog   = document.getElementById('prog');
+  var loadedBar = document.getElementById('loaded');
+  var beats  = [].slice.call(document.querySelectorAll('.beat'));
+  var marque = document.getElementById('marque');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PAPER  = getComputedStyle(document.documentElement).getPropertyValue('--papier').trim() || '#f3efe7';
+
+  function name(dir, i){
+    var s = String(i);
+    while (s.length < 4) s = '0' + s;
+    return dir + 'f' + s + EXT;
+  }
+
+  var frames = [], sketches = [], shown = -1, shownKey = '', shownPh = null, started = false;
+  var fige = false;         // ?p= : position figee, redessinee a chaque image chargee
+
+  // Le mot SEMAPHORE tient exactement entre les marges du cadre, quelle que
+  // soit la largeur : on mesure a 100 px et on met a l'echelle.
+  function tailleMarque(){
+    var boite = marque.parentElement.getBoundingClientRect().width;
+    if (!boite) return;
+    marque.style.fontSize = '100px';
+    var w = marque.getBoundingClientRect().width;
+    if (w) marque.style.fontSize = (100 * boite / w).toFixed(2) + 'px';
+  }
+
+  function resize(){
+    var r = Math.min(devicePixelRatio, 2);
+    var W = cadre.clientWidth, H = cadre.clientHeight;
+    canvas.width  = Math.round(W * r);
+    canvas.height = Math.round(H * r);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    tailleMarque();
+    // Changer la taille vide le canvas : on redessine tout de suite, sans
+    // attendre l'image suivante, sinon l'ecran passe au noir un instant.
+    shownKey = '';
+    if (shown > 0 && shownPh) draw(shown, shownPh);
+  }
+
+  // Recadrage « cover » : l'image et l'ecran n'ont jamais le meme rapport,
+  // on remplit sans jamais deformer.
+  function cover(img, c){
+    c = c || ctx;
+    var cw = canvas.width, ch = canvas.height;
+    var s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    var w = img.naturalWidth * s, h = img.naturalHeight * s;
+    c.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+  }
+
+  var off = document.createElement('canvas');
+  var octx = off.getContext('2d');
+  function offReady(){
+    if (off.width !== canvas.width || off.height !== canvas.height){
+      off.width = canvas.width; off.height = canvas.height;
+    }
+    octx.globalCompositeOperation = 'source-over';
+    octx.globalAlpha = 1;
+    octx.clearRect(0, 0, off.width, off.height);
+  }
+
+  // Le lavis : la photo sans couleur, eclaircie, qu'on multiplie sur le
+  // papier. C'est lui qui donne les ombres et les volumes au dessin.
+  function lavis(img){
+    offReady();
+    cover(img, octx);
+    octx.globalCompositeOperation = 'saturation';
+    octx.fillStyle = '#808080';
+    octx.fillRect(0, 0, off.width, off.height);
+    octx.globalCompositeOperation = 'source-over';
+    octx.fillStyle = 'rgba(255,255,255,0.52)';
+    octx.fillRect(0, 0, off.width, off.height);
+    return off;
+  }
+
+  // Le trace d'ouverture : le dessin apparait du haut a gauche vers le bas
+  // a droite, sur une bande floue, comme sous la main qui dessine.
+  function trace(sk, t){
+    offReady();
+    cover(sk, octx);
+    var w = off.width, h = off.height;
+    var g = octx.createLinearGradient(0, 0, w, h);
+    var a = t * 1.35 - 0.35;
+    g.addColorStop(Math.max(0, Math.min(1, a)), 'rgba(0,0,0,1)');
+    g.addColorStop(Math.max(0, Math.min(1, a + 0.35)), 'rgba(0,0,0,0)');
+    octx.globalCompositeOperation = 'destination-in';
+    octx.fillStyle = g;
+    octx.fillRect(0, 0, w, h);
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(off, 0, 0);
+  }
+
+  function ease(t){ t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); }
+  function part(p, seg){ return ease((p - seg[0]) / (seg[1] - seg[0])); }
+
+  // Les trois couches pour une position du scroll.
+  function phases(p){
+    return {
+      w: part(p, LAVIS),
+      c: part(p, COULEUR),
+      l: 1 - part(p, TRAITS)
+    };
+  }
+
+  var intro = reduce ? 1 : 0;
+
+  function draw(i, ph){
+    var img = frames[i], sk = sketches[i];
+    var key = i + '|' + (sk ? ph.w.toFixed(3) + '|' + ph.c.toFixed(3) + '|' + ph.l.toFixed(3) + '|' + intro.toFixed(3) : 'photo');
+    if (key === shownKey) return;
+    if (!sk || (ph.c >= 1 && ph.l <= 0)){
+      if (!img) return;
+      cover(img);
+    } else if (intro < 1){
+      trace(sk, intro);
+    } else {
+      cover(sk);
+      if (img){
+        if (ph.w > 0 && ph.c < 1){
+          ctx.globalAlpha = ph.w;
+          ctx.globalCompositeOperation = 'multiply';
+          ctx.drawImage(lavis(img), 0, 0);
+        }
+        if (ph.c > 0){
+          ctx.globalAlpha = ph.c;
+          ctx.globalCompositeOperation = 'source-over';
+          cover(img);
+          if (ph.l > 0){
+            // Les traits restent poses sur la photo et s'effacent en dernier.
+            ctx.globalAlpha = ph.l * ph.c;
+            ctx.globalCompositeOperation = 'multiply';
+            cover(sk);
+          }
+        }
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1;
+      }
+    }
+    shown = i; shownKey = key; shownPh = ph;
+  }
+
+  // File de chargement dans l'ordre du chemin : le croquis et la photo de
+  // chaque pas se suivent, on peut partir des que les premiers pas sont la.
+  var queue = [];
+  for (var q = 1; q <= COUNT; q++){
+    if (q <= SKETCH) queue.push({ i: q, sketch: true });
+    queue.push({ i: q, sketch: false });
+  }
+  var TOTAL = queue.length;
+  var loaded = 0, settled = 0, next = 0;
+
+  function loadNext(){
+    if (next >= TOTAL) return;
+    var item = queue[next++];
+    var img = new Image();
+    img.decoding = 'async';
+    img.onload = function(){
+      (item.sketch ? sketches : frames)[item.i] = img; loaded++; settled++;
+      progress();
+      if (started && fige) render(eased);
+      if (!started && loaded >= START_AT) go();
+      if (!started && settled >= TOTAL) go();
+      loadNext();
+    };
+    img.onerror = function(){
+      settled++; progress();
+      if (!started && settled >= TOTAL) go();
+      loadNext();
+    };
+    img.src = name(item.sketch ? SDIR : DIR, item.i);
+  }
+
+  function progress(){
+    var p = Math.round(settled / TOTAL * 100) + '%';
+    fill.style.width = Math.round(Math.min(1, settled / START_AT) * 100) + '%';
+    loadedBar.style.width = p;
+  }
+
+  function go(){
+    if (started) return;
+    started = true;
+    if (loaded === 0){
+      document.getElementById('stateTitle').textContent = 'La visite n’a pas pu démarrer';
+      document.getElementById('stateBody').textContent = 'Aucune image n’a été trouvée dans ' + DIR;
+      return;
+    }
+    resize();
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    state.style.opacity = 0;
+    setTimeout(function(){ state.hidden = true; }, 900);
+    start();
+  }
+
+  function beatOpacity(p, el){
+    var a = parseFloat(el.dataset.in), b = parseFloat(el.dataset.out);
+    var f = Math.max(0.02, (b - a) * 0.3);
+    if (p < a || p > b) return 0;
+    if (a <= 0 && p <= f) return 1;
+    if (b >= 1 && p >= b - f) return 1;
+    return Math.min(1, Math.min(p - a, b - p) / f);
+  }
+
+  var target = 0, eased = 0;
+
+  var visite = document.getElementById('visite');
+  function maxScroll(){ return Math.max(1, visite.offsetHeight - innerHeight); }
+  function readScroll(){
+    target = Math.min(1, Math.max(0, scrollY / maxScroll()));
+  }
+
+  // La pilule « Decouvrir la villa » emmene dans la visite, jusqu'a la
+  // corniche, en douceur
+  document.getElementById('entree').addEventListener('click', function(e){
+    e.preventDefault();
+    scrollTo({ top: maxScroll() * 0.2, behavior: reduce ? 'auto' : 'smooth' });
+  });
+
+  // Une image pas encore chargee ne doit pas faire clignoter la marche : on
+  // retient la derniere image disponible avant elle.
+  function pick(p){
+    var i = Math.round(1 + p * (COUNT - 1));
+    for (var k = i; k >= 1; k--) if (frames[k]) return k;
+    for (var j = i; j <= COUNT; j++) if (frames[j]) return j;
+    return shown;
+  }
+
+  var papier = true;
+  function render(p){
+    var i = pick(p), ph = phases(p);
+    if (i > 0) draw(i, ph);
+    // Le titre attend que le trait soit pose.
+    var voile = intro < 1 ? ease((intro - 0.55) / 0.45) : 1;
+    for (var k = 0; k < beats.length; k++){
+      var o = beatOpacity(p, beats[k]) * voile;
+      beats[k].style.opacity = o;
+      // Les liens d'un ecran efface ne doivent pas rester cliquables
+      beats[k].style.visibility = o > 0.02 ? 'visible' : 'hidden';
+    }
+    var feuille = ph.c < 0.5;
+    if (feuille !== papier){ papier = feuille; document.body.classList.toggle('papier', papier); }
+  }
+
+  function start(){
+    addEventListener('resize', resize);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(tailleMarque);
+    // ?p=0.2 fige la visite a cette position, sans defilement : pour
+    // controler une image precise, ou la capturer en headless.
+    var fixe = parseFloat(PARAMS.get('p'));
+    if (!isNaN(fixe)){
+      intro = 1; fige = true;
+      target = eased = Math.min(1, Math.max(0, fixe));
+      render(eased);
+      prog.style.width = Math.round(eased * 100) + '%';
+      return;
+    }
+    addEventListener('scroll', readScroll, { passive: true });
+    // ?y=12000 demarre la page deja defilee a cette hauteur, pour controler
+    // le passage de la visite au site en capture
+    var y = parseFloat(PARAMS.get('y'));
+    if (!isNaN(y)){ intro = 1; scrollTo(0, y); }
+    readScroll();
+    if (!isNaN(y)) eased = target;
+
+    if (reduce){
+      eased = target;
+      render(eased);
+      return;
+    }
+
+    var t0 = performance.now();
+    (function frame(now){
+      requestAnimationFrame(frame);
+      if (intro < 1) intro = Math.min(1, (now - t0) / INTRO_MS);
+      eased += (target - eased) * 0.085;
+      render(eased);
+      prog.style.width = Math.round(eased * 100) + '%';
+    })(t0);
+  }
+
+  for (var c = 0; c < PARALLEL; c++) loadNext();
+})();
+</script>
+<script src="site.js?v=12"></script>
+<script src="anime.js?v=12"></script>
+</body>
+</html>
