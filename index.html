@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css?v=13">
+<link rel="stylesheet" href="site.css?v=14">
 <style>
   :root{
     --dim:rgba(255,255,255,.62);
@@ -371,10 +371,15 @@
   // lueur, aberration, contraste doux). `?brut=1` montre les rendus tels
   // que Blender les a sortis, pour comparer.
   var PARAMS = new URLSearchParams(location.search);
-  var DIR   = PARAMS.get('brut') ? 'images-brut/' : 'images/';
+  // Sur telephone, l'ecran fait au plus 430 px de large : on sert le jeu
+  // d'images de 720 px (tel-images.py). Le decodage d'une image de 1280 px
+  // coute trois fois plus cher, et c'est ce cout, paye a chaque nouvelle
+  // image, qui hachait le defilement.
+  var TEL = innerWidth <= 760 && !PARAMS.get('brut');
+  var DIR   = PARAMS.get('brut') ? 'images-brut/' : (TEL ? 'images-tel/' : 'images/');
   var EXT   = '.webp';
   var SKETCH = 88;          // croquis disponibles, du depart a l'allee
-  var SDIR   = 'dessin/';
+  var SDIR   = TEL ? 'dessin-tel/' : 'dessin/';
   var LAVIS   = [0.06, 0.20];   // le lavis monte
   var COULEUR = [0.19, 0.34];   // la couleur vient
   var TRAITS  = [0.27, 0.385];  // les traits s'effacent
@@ -414,8 +419,13 @@
   }
 
   function resize(){
-    var r = Math.min(devicePixelRatio, 2);
     var W = cadre.clientWidth, H = cadre.clientHeight;
+    // Sur telephone, un canvas de 1,5 fois la taille de l'ecran suffit face
+    // a des images de 720 px, et c'est 44 % de pixels en moins a composer.
+    // Telephone couche, l'ecran est large : on borne aussi le canvas a un
+    // tiers de plus que l'image, au-dela on n'etire que du flou.
+    var r = TEL ? Math.min(devicePixelRatio, 1.5, 940 / Math.max(1, W))
+                : Math.min(devicePixelRatio, 2);
     canvas.width  = Math.round(W * r);
     canvas.height = Math.round(H * r);
     canvas.style.width = W + 'px';
@@ -450,7 +460,11 @@
 
   // Le lavis : la photo sans couleur, eclaircie, qu'on multiplie sur le
   // papier. C'est lui qui donne les ombres et les volumes au dessin.
-  function lavis(img){
+  var lavisPour = -1, lavisTaille = '';
+  function lavis(img, i){
+    var taille = canvas.width + 'x' + canvas.height;
+    if (i === lavisPour && taille === lavisTaille) return off;
+    lavisPour = i; lavisTaille = taille;
     offReady();
     cover(img, octx);
     octx.globalCompositeOperation = 'saturation';
@@ -465,6 +479,7 @@
   // Le trace d'ouverture : le dessin apparait du haut a gauche vers le bas
   // a droite, sur une bande floue, comme sous la main qui dessine.
   function trace(sk, t){
+    lavisPour = -1;
     offReady();
     cover(sk, octx);
     var w = off.width, h = off.height;
@@ -484,11 +499,13 @@
   function part(p, seg){ return ease((p - seg[0]) / (seg[1] - seg[0])); }
 
   // Les trois couches pour une position du scroll.
+  var PALIERS = 40;
+  function palier(v){ return Math.round(v * PALIERS) / PALIERS; }
   function phases(p){
     return {
-      w: part(p, LAVIS),
-      c: part(p, COULEUR),
-      l: 1 - part(p, TRAITS)
+      w: palier(part(p, LAVIS)),
+      c: palier(part(p, COULEUR)),
+      l: palier(1 - part(p, TRAITS))
     };
   }
 
@@ -504,12 +521,16 @@
     } else if (intro < 1){
       trace(sk, intro);
     } else {
-      cover(sk);
+      // Une photo posee en « cover » remplit tout le cadre : quand elle est
+      // opaque, le croquis du fond ne se verrait pas, autant ne pas le
+      // dessiner. C'est une passe plein ecran economisee sur la fin de la
+      // transition, la ou il en restait le plus.
+      if (!img || ph.c < 1) cover(sk);
       if (img){
         if (ph.w > 0 && ph.c < 1){
           ctx.globalAlpha = ph.w;
           ctx.globalCompositeOperation = 'multiply';
-          ctx.drawImage(lavis(img), 0, 0);
+          ctx.drawImage(lavis(img, i), 0, 0);
         }
         if (ph.c > 0){
           ctx.globalAlpha = ph.c;
@@ -671,7 +692,7 @@
   for (var c = 0; c < PARALLEL; c++) loadNext();
 })();
 </script>
-<script src="site.js?v=13"></script>
-<script src="anime.js?v=13"></script>
+<script src="site.js?v=14"></script>
+<script src="anime.js?v=14"></script>
 </body>
 </html>

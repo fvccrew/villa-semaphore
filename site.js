@@ -95,3 +95,94 @@
     note.classList.add('note-repondu');
   });
 })();
+
+// ------------------------------------------------------------- le menu
+// Sur telephone, les pages ne tiennent pas en pilules : un bouton ouvre un
+// panneau pleine page, les titres en grand comme le reste du site, chacun
+// avec ce qu'on y trouve. Construit ici a partir de la nav, pour que les
+// cinq pages restent identiques et qu'il n'y ait qu'un endroit a corriger.
+(function(){
+  var barre = document.querySelector('.barre');
+  var nav = barre && barre.querySelector('nav');
+  var droite = barre && barre.querySelector('.droite');
+  if (!nav || !droite) return;
+
+  // Ce qu'on trouve derriere chaque page, dit en quelques mots
+  var SOUS = {
+    './': 'Le survol, la porte, le bassin',
+    'villa.html': '320 m² sur la roche, la galerie',
+    'prestations.html': 'Conciergerie, chef, cave',
+    'situation.html': 'Gigaro, le golfe, les temps de route',
+    'contact.html': 'Demander des dates'
+  };
+
+  var liens = [].slice.call(nav.querySelectorAll('a'));
+  var bouton = document.createElement('button');
+  bouton.type = 'button';
+  bouton.className = 'menu-bouton';
+  bouton.setAttribute('aria-label', 'Ouvrir le menu');
+  bouton.setAttribute('aria-expanded', 'false');
+  bouton.setAttribute('aria-controls', 'menu-tel');
+  bouton.innerHTML = '<span class="traits" aria-hidden="true"><i></i><i></i></span>';
+  droite.appendChild(bouton);
+
+  var panneau = document.createElement('div');
+  panneau.className = 'menu-panneau';
+  panneau.id = 'menu-tel';
+  panneau.hidden = true;
+  var html = '<div class="menu-dedans"><nav class="menu-pages" aria-label="Pages">';
+  liens.forEach(function(a){
+    var href = a.getAttribute('href');
+    var ici = a.hasAttribute('aria-current') ? ' aria-current="page"' : '';
+    html += '<a href="' + href + '"' + ici + '><span class="titre">' + a.textContent +
+      '</span><span class="sous">' + (SOUS[href] || '') + '</span></a>';
+  });
+  html += '</nav><div class="menu-pied">' +
+    '<a class="menu-tel" href="tel:+33494000000">04 94 00 00 00</a>' +
+    '<a class="menu-mail" href="mailto:contact@villa-semaphore.fr">contact@villa-semaphore.fr</a>' +
+    '<p class="menu-lieu">Corniche de Gigaro, La Croix-Valmer</p>' +
+    '</div></div>';
+  panneau.innerHTML = html;
+  document.body.appendChild(panneau);
+
+  var ouvert = false, yGarde = 0;
+  function ouvrir(){
+    if (ouvert) return;
+    ouvert = true;
+    yGarde = scrollY;
+    panneau.hidden = false;
+    // deux images d'attente, sinon la transition part du mauvais etat
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      document.body.classList.add('menu-ouvert');
+    }); });
+    bouton.setAttribute('aria-expanded', 'true');
+    bouton.setAttribute('aria-label', 'Fermer le menu');
+    // la page ne doit pas defiler derriere le panneau
+    document.body.style.position = 'fixed';
+    document.body.style.top = -yGarde + 'px';
+    document.body.style.width = '100%';
+    var premier = panneau.querySelector('a');
+    if (premier) premier.focus({ preventScroll: true });
+  }
+  function fermer(rendre){
+    if (!ouvert) return;
+    ouvert = false;
+    document.body.classList.remove('menu-ouvert');
+    bouton.setAttribute('aria-expanded', 'false');
+    bouton.setAttribute('aria-label', 'Ouvrir le menu');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    scrollTo(0, yGarde);
+    setTimeout(function(){ if (!ouvert) panneau.hidden = true; }, 420);
+    if (rendre) bouton.focus({ preventScroll: true });
+  }
+  bouton.addEventListener('click', function(){ ouvert ? fermer(true) : ouvrir(); });
+  panneau.addEventListener('click', function(e){
+    // un lien vers la page ou l'on est deja ne rechargera rien : on ferme
+    if (e.target.closest('a')) fermer(false);
+  });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape') fermer(true); });
+  // tourner le telephone en grand ecran laisse le panneau ouvert pour rien
+  addEventListener('resize', function(){ if (ouvert && innerWidth > 700) fermer(false); });
+})();

@@ -466,3 +466,105 @@ form.demande .note-repondu { color: #d8d4cb; }
   .carte .l-lardier { transform: translate(0, 10px); }
   .carte .l-mer { transform: translate(0, -6px); }
 }
+
+/* --------------------------------------------------- le menu du telephone */
+/* Le bouton vit dans la barre, a cote du telephone : deux traits qui se
+   croisent quand le panneau s'ouvre. Le panneau est une page de papier qui
+   descend, avec les pages en grand comme les titres du site. */
+.menu-bouton { display: none; }
+.menu-panneau { display: none; }
+
+@media (max-width: 700px) {
+  /* Les pilules cedent la place au bouton : la barre tient sur une ligne
+     et le haut de l'ecran est rendu a l'image. */
+  .barre { grid-template-columns: 1fr auto; row-gap: 0; }
+  .barre nav { display: none; }
+  .barre .droite { gap: 8px; }
+
+  .menu-bouton {
+    display: grid; place-items: center; width: 44px; height: 44px; padding: 0;
+    border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08); color: inherit; cursor: pointer;
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    transition: border-color 0.6s, background 0.3s;
+  }
+  .papier .menu-bouton, .sur-clair .menu-bouton { border-color: rgba(15, 15, 15, 0.2); background: rgba(247, 246, 243, 0.55); }
+  .menu-bouton .traits { display: grid; gap: 5px; width: 17px; }
+  .menu-bouton .traits i { display: block; height: 1.5px; background: currentColor; border-radius: 2px; transition: transform 0.32s ease, opacity 0.2s; }
+  .menu-ouvert .menu-bouton .traits i:first-child { transform: translateY(3.25px) rotate(45deg); }
+  .menu-ouvert .menu-bouton .traits i:last-child { transform: translateY(-3.25px) rotate(-45deg); }
+  /* Ouvert, le bouton est sur le papier du panneau : il en prend l'encre */
+  .menu-ouvert .menu-bouton { border-color: rgba(15, 15, 15, 0.2); background: transparent; color: var(--encre); }
+  /* La barre ne doit pas s'effacer pendant qu'on lit le menu */
+  .menu-ouvert .barre { transform: none !important; opacity: 1 !important; pointer-events: auto !important; }
+  .menu-ouvert .barre .nom { color: var(--encre); }
+  .menu-ouvert .barre .tel { background: var(--encre); color: #fff; }
+
+  /* Ferme, le panneau doit disparaitre pour de bon : un display:block dans
+     un media query l'emporte sur l'attribut hidden, et le panneau restait
+     etendu sur toute la page, invisible mais devant tout. Plus rien
+     n'etait cliquable au doigt. */
+  .menu-panneau[hidden] { display: none; }
+  .menu-panneau {
+    display: block; position: fixed; inset: 0; z-index: 25;
+    background: var(--papier); color: var(--encre);
+    overflow-y: auto; overscroll-behavior: contain;
+    opacity: 0; transform: translateY(-14px);
+    transition: opacity 0.34s ease, transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .menu-ouvert .menu-panneau { opacity: 1; transform: none; }
+  .menu-dedans {
+    min-height: 100%; display: flex; flex-direction: column; justify-content: space-between;
+    padding: calc(var(--marge) + 96px) calc(var(--marge) + 18px) calc(var(--marge) + 28px);
+  }
+  .menu-pages { display: grid; }
+  .menu-pages a {
+    display: grid; gap: 4px; padding: 18px 0; text-decoration: none; color: inherit;
+    border-top: 1px solid rgba(15, 15, 15, 0.12);
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .menu-pages a:last-child { border-bottom: 1px solid rgba(15, 15, 15, 0.12); }
+  .menu-ouvert .menu-pages a { opacity: 1; transform: none; }
+  /* les lignes arrivent l'une apres l'autre, sans rien qui saute */
+  .menu-ouvert .menu-pages a:nth-child(1) { transition-delay: 0.06s; }
+  .menu-ouvert .menu-pages a:nth-child(2) { transition-delay: 0.12s; }
+  .menu-ouvert .menu-pages a:nth-child(3) { transition-delay: 0.18s; }
+  .menu-ouvert .menu-pages a:nth-child(4) { transition-delay: 0.24s; }
+  .menu-ouvert .menu-pages a:nth-child(5) { transition-delay: 0.3s; }
+  .menu-pages .titre { font-family: var(--serif); font-size: clamp(2.1rem, 11vw, 2.9rem); line-height: 1.02; letter-spacing: -0.01em; }
+  .menu-pages .sous { font-size: 0.78rem; letter-spacing: 0.02em; color: var(--gris); }
+  /* La page ouverte : son titre en italique et un point devant */
+  .menu-pages a[aria-current="page"] .titre { font-style: italic; }
+  .menu-pages a[aria-current="page"] .titre::before {
+    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--bassin); vertical-align: 0.45em; margin-right: 12px;
+  }
+  .menu-pied { margin-top: 40px; display: grid; gap: 8px; justify-items: start; }
+  .menu-tel {
+    font-family: var(--serif); font-size: 1.6rem; text-decoration: none; color: inherit;
+    min-height: 44px; display: inline-flex; align-items: center;
+  }
+  .menu-mail { font-size: 0.86rem; color: var(--gris); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .menu-lieu { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris); margin: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-panneau, .menu-pages a { transition: none; }
+}
+
+/* ------------------------------------------- les tableaux au telephone */
+/* En deux colonnes sur 390 px, le lieu se hachait sur deux lignes et la
+   duree venait se coller contre lui. Chaque ligne passe donc l'une sous
+   l'autre : le lieu en petites capitales, la duree en dessous, avec de
+   l'air entre les lignes. Le bureau garde ses deux colonnes. */
+@media (max-width: 700px) {
+  table.faits, table.faits tbody, table.faits tr, table.faits th, table.faits td { display: block; width: auto; }
+  table.faits tr { padding: 15px 0; border-bottom: 1px solid var(--filet); }
+  table.faits tr:last-child { border-bottom: 0; }
+  table.faits th, table.faits td { padding: 0; border: 0; }
+  table.faits th { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--gris); }
+  table.faits td { margin-top: 7px; font-size: 1.35rem; }
+  .nuit table.faits tr { border-bottom-color: rgba(255, 255, 255, 0.16); }
+  .nuit table.faits th { color: #b9b9b3; }
+}
