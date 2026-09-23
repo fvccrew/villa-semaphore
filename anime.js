@@ -138,9 +138,12 @@
       if (g.bottom > -200 && g.top < H + 200){
         // -1 quand la grille entre par le bas, +1 quand elle sort par le haut
         var tg = (g.top + g.height / 2 - H / 2) / (H / 2 + g.height / 2);
+        // Sur telephone les colonnes sont deux et la page est etroite :
+        // a 90 px la premiere remontait par-dessus la legende
+        var amplitude = innerWidth < 700 ? 30 : 90;
         cols.forEach(function(c){
           var v = parseFloat(c.dataset.vitesse) || 0;
-          c.style.transform = 'translate3d(0,' + (tg * v * 90).toFixed(1) + 'px,0)';
+          c.style.transform = 'translate3d(0,' + (tg * v * amplitude).toFixed(1) + 'px,0)';
         });
       }
     }

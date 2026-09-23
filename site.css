@@ -218,6 +218,8 @@ ul.liste li small { color: var(--gris); font-size: 0.8rem; white-space: nowrap; 
 .carte .ici { fill: var(--bassin); }
 .carte .ici-texte { fill: var(--encre); font-family: var(--serif); font-size: 20px; }
 .carte .route { fill: none; stroke: var(--encre-douce); stroke-width: 0.8; stroke-dasharray: 3 4; }
+/* Le nom court ne sert que sur telephone, ou le long deborde sur la villa */
+.carte .nom-court { display: none; }
 
 /* ------------------------------------------------------------ la nuit */
 /* La bande sombre de fin : l'appel, puis le pied. */
@@ -416,3 +418,51 @@ form.demande .note-repondu { color: #d8d4cb; }
 .colonnes .dessin .photo { transition: opacity 1s ease 0.3s, filter 1.8s ease 0.9s; }
 .colonnes .dessin .croquis { transition: opacity 1.4s ease 1.6s; }
 @media (max-width: 640px) { .colonnes { grid-template-columns: 1fr 1fr; } .colonnes .col:nth-child(3) { display: none; } }
+
+
+/* ============================================================ le téléphone */
+/* Mesuré en émulation à 360, 390 et 430 px (`node tel-controle.js`) : rien
+   ne déborde en largeur, la grille et les images tiennent. Ce qui suit
+   corrige ce qui se voyait mal au doigt. */
+@media (max-width: 700px) {
+  /* Les cinq pilules ne tiennent pas dans 390 px : la rangée défile de
+     côté, et un dégradé sur le bord droit dit qu'il reste des pages. */
+  .barre nav { -webkit-mask-image: linear-gradient(to right, #000 90%, transparent); mask-image: linear-gradient(to right, #000 90%, transparent); }
+  /* Des cibles qu'on attrape au doigt : 40 px pour les pages, 44 pour le
+     téléphone, qui est le seul appel visible en haut sur un petit écran */
+  .barre nav a { padding: 9px 15px; }
+  .barre .tel { padding: 13px 15px; min-height: 44px; min-width: 44px; }
+  /* iOS agrandit la page dès qu'on touche un champ dont le texte est sous
+     16 px : la saisie sautait dans le formulaire de demande */
+  form.demande input, form.demande textarea, form.demande select { font-size: 16px; }
+  /* La pilule du pied prenait toute la largeur, texte collé à gauche */
+  .pied-page .appel .bouton { justify-self: start; }
+  /* Les liens du pied sont les seules pages atteignables en bas : on leur
+     donne de quoi etre touches */
+  .pied-page .lignes ul a { display: inline-block; padding: 5px 0; }
+  /* La colonne de gauche de la galerie monte en glissant : la légende lui
+     laisse la place (l'amplitude est réduite dans anime.js) */
+  .galerie .legende { margin-bottom: 52px; }
+  /* Les prix des prestations serraient le texte sur la moitie de la
+     largeur : ils passent sous leur ligne */
+  ul.liste li { grid-template-columns: minmax(0, 1fr); }
+  ul.liste li small { white-space: normal; margin-top: 8px; }
+}
+
+/* La carte du golfe : à 350 px de large, les noms tombaient à cinq pixels
+   et se chevauchaient autour de la villa. On les grossit, on écarte les
+   trois du coin de la villa, et les repères lointains sortent. */
+@media (max-width: 700px) {
+  .carte text { font-size: 22px; }
+  .carte .ici-texte { font-size: 30px; }
+  .carte .trait { stroke-width: 2.2; }
+  .carte .route { stroke-width: 1.6; stroke-dasharray: 5 6; }
+  .carte .loin { display: none; }
+  .carte .nom-long { display: none; }
+  .carte .nom-court { display: block; }
+  .carte .l-cavalaire { transform: translate(-30px, 30px); }
+  .carte .l-croix { transform: translate(-10px, -34px); }
+  .carte .l-gigaro { transform: translate(-4px, 16px); }
+  .carte .l-lardier { transform: translate(0, 10px); }
+  .carte .l-mer { transform: translate(0, -6px); }
+}

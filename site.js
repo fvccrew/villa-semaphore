@@ -14,6 +14,7 @@
   if (h > 0) document.documentElement.style.setProperty('--ecran', h + 'px');
 
   var fonds = [].slice.call(document.querySelectorAll('[data-fond]')), surClair = false;
+  var visite = document.querySelector('.visite');
   // Passe l'en-tete, la barre s'efface quand on descend et revient des
   // qu'on remonte, pour ne pas passer sur les textes
   var dernierY = scrollY, cachee = false;
@@ -25,8 +26,16 @@
     }
     var c = quoi === 'clair';
     if (c !== surClair){ surClair = c; document.body.classList.toggle('sur-clair', surClair); }
-    var cache = quoi !== '' && scrollY > dernierY + 4;
-    var montre = scrollY < dernierY - 4 || quoi === '';
+    // Le dernier ecran de la visite remonte avec la page et passe
+    // derriere la barre : sur telephone, le titre et la pilule finissaient
+    // dans les pilules du haut. On efface la barre pendant le passage.
+    var passage = false;
+    if (visite){
+      var v = visite.getBoundingClientRect();
+      passage = v.bottom < innerHeight - 8 && v.bottom > -80;
+    }
+    var cache = passage || (quoi !== '' && scrollY > dernierY + 4);
+    var montre = !passage && (scrollY < dernierY - 4 || quoi === '');
     if (cache && !cachee){ cachee = true; document.body.classList.add('barre-cachee'); }
     else if (montre && cachee){ cachee = false; document.body.classList.remove('barre-cachee'); }
     if (Math.abs(scrollY - dernierY) > 4) dernierY = scrollY;
@@ -82,7 +91,7 @@
     var note = f.querySelector('.note');
     if (!note) return;
     if (!f.checkValidity()){ f.reportValidity(); return; }
-    note.textContent = 'Merci. Cette villa est une demonstration : la demande n\u2019est pas envoyee. Sur un site en production, elle arriverait dans votre boite mail.';
+    note.textContent = 'Merci. Cette villa est une d\u00e9monstration : la demande n\u2019est pas envoy\u00e9e. Sur un site en production, elle arriverait dans votre bo\u00eete mail.';
     note.classList.add('note-repondu');
   });
 })();
