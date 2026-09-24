@@ -22,10 +22,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="La Villa Sémaphore : à gauche le croquis d'architecte, à droite la photographie, terrasse et bassin à débordement face au golfe">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css?v=14">
+<!-- Polices servies par le site lui-meme : aucune requete vers Google,
+     donc aucune adresse IP de visiteur transmise a un tiers. -->
+<link rel="preload" href="polices/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="polices/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=15">
 <style>
   :root{
     --dim:rgba(255,255,255,.62);
@@ -359,6 +360,7 @@
   <div class="bas">
     <span>Villa Sémaphore, golfe de Saint-Tropez</span>
     <span>Villa imaginaire, modélisée en 3D. Une démonstration <a href="https://weboost-studio.fr">Weboost Studio</a>.</span>
+    <span class="legal"><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a></span>
   </div>
 </footer>
 
@@ -708,7 +710,7 @@
   for (var c = 0; c < PARALLEL; c++) loadNext();
 })();
 </script>
-<script src="site.js?v=14"></script>
-<script src="anime.js?v=14"></script>
+<script src="site.js?v=15"></script>
+<script src="anime.js?v=15"></script>
 </body>
 </html>

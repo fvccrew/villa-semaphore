@@ -10,6 +10,13 @@
    la maquette, et devient photo quand elle entre à l'écran (site.js pose la
    classe .vu). Au survol, le croquis revient. */
 
+/* Les polices sont servies par le site (polices/, jeu latin, 90 Ko) et non
+   par Google Fonts : la page ne contacte aucun tiers. Inter est une police
+   variable, un seul fichier couvre les graisses 300 a 500. */
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url(polices/instrument-serif.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(polices/instrument-serif-italique.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 300 500; font-display: swap; src: url(polices/inter.woff2) format('woff2'); }
+
 :root {
   --page: #f7f6f3;
   --encre: #0f0f0f;
@@ -567,4 +574,79 @@ form.demande .note-repondu { color: #d8d4cb; }
   table.faits td { margin-top: 7px; font-size: 1.35rem; }
   .nuit table.faits tr { border-bottom-color: rgba(255, 255, 255, 0.16); }
   .nuit table.faits th { color: #b9b9b3; }
+}
+
+/* ------------------------------------------------ les liens légaux du pied */
+.pied .legal, .pied-page .bas .legal { display: inline-flex; gap: 20px; flex-wrap: wrap; }
+.pied .legal a, .pied-page .bas .legal a { border-bottom: 0; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.3); text-underline-offset: 4px; }
+.pied .legal a:hover, .pied-page .bas .legal a:hover { text-decoration-color: #fff; }
+@media (max-width: 700px) {
+  .pied .legal a, .pied-page .bas .legal a { display: inline-block; padding: 11px 0; }
+}
+
+/* ------------------------------------------------ les pages légales */
+/* Mentions légales et confidentialité. Pas de photo : l'en-tête est une
+   carte de papier, le croquis d'architecte de l'arrivée s'y efface vers la
+   gauche, comme une feuille du dossier de la villa. Le texte se lit sur une
+   colonne étroite, le sommaire reste à gauche sur grand écran. */
+.entete-legal {
+  position: relative; overflow: hidden; margin: var(--marge); border-radius: var(--rayon);
+  background: var(--papier); padding: clamp(150px, 20vh, 220px) var(--pad) clamp(40px, 6vw, 72px);
+  display: grid; grid-template-columns: repeat(12, var(--col)); gap: 0 24px; align-items: end;
+}
+.entete-legal .trait {
+  position: absolute; top: 0; right: 0; height: 100%; width: min(62%, 900px); object-fit: cover; object-position: 30% 50%;
+  opacity: 0.5; mix-blend-mode: multiply; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 55%); mask-image: linear-gradient(90deg, transparent 0%, #000 55%);
+}
+.entete-legal > div { position: relative; grid-column: 1 / span 8; }
+.entete-legal .sur-titre { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--encre-douce); display: inline-flex; align-items: center; gap: 10px; }
+.entete-legal .sur-titre::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--bassin); }
+.entete-legal h1 { margin-top: 18px; }
+.entete-legal p.chapeau { margin-top: 22px; max-width: 46ch; color: var(--encre-douce); }
+.entete-legal .date { margin-top: 26px; font-size: 0.78rem; color: var(--gris); }
+
+.legal-corps {
+  display: grid; grid-template-columns: repeat(12, var(--col)); gap: 0 24px;
+  padding: clamp(56px, 8vw, 120px) var(--pad) clamp(72px, 10vw, 150px);
+}
+.sommaire { grid-column: 1 / span 3; align-self: start; position: sticky; top: 110px; }
+.sommaire h2 { font-family: var(--sans); font-weight: 500; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px; }
+.sommaire ol { list-style: none; counter-reset: s; }
+.sommaire li { counter-increment: s; border-bottom: 1px solid var(--filet); }
+.sommaire a { display: grid; grid-template-columns: 2.2em 1fr; padding: 11px 0; font-size: 0.88rem; color: var(--encre-douce); text-decoration: none; transition: color 0.3s; }
+.sommaire a::before { content: counter(s, decimal-leading-zero); color: var(--gris); font-size: 0.74rem; padding-top: 0.15em; }
+.sommaire a:hover { color: var(--encre); }
+.legal-texte { grid-column: 5 / span 7; max-width: 66ch; }
+.legal-texte section { scroll-margin-top: 110px; }
+.legal-texte section + section { margin-top: clamp(56px, 7vw, 88px); }
+.legal-texte h2 { font-size: clamp(2rem, 1.5rem + 2vw, 3.2rem); display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: baseline; }
+.legal-texte h2 .num { font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.06em; color: var(--bassin); }
+.legal-texte h3 { font-size: 1.6rem; margin-top: 36px; }
+.legal-texte p, .legal-texte li { color: var(--encre-douce); line-height: 1.7; }
+.legal-texte h2 + p, .legal-texte h2 + ul, .legal-texte h2 + table { margin-top: 26px; }
+.legal-texte p + p, .legal-texte ul + p, .legal-texte p + ul, .legal-texte h3 + p, .legal-texte table + p { margin-top: 1em; }
+.legal-texte ul { list-style: none; }
+.legal-texte ul li { position: relative; padding-left: 22px; margin-top: 8px; }
+.legal-texte ul li::before { content: ''; position: absolute; left: 0; top: 0.8em; width: 10px; height: 1px; background: var(--bassin); }
+.legal-texte strong { color: var(--encre); font-weight: 500; }
+.legal-texte a { color: var(--encre); text-decoration: none; border-bottom: 1px solid rgba(15, 15, 15, 0.3); overflow-wrap: anywhere; transition: border-color 0.3s, color 0.3s; }
+.legal-texte a:hover { color: var(--bassin); border-color: var(--bassin); }
+.legal-texte table.faits td { font-size: 1.2rem; overflow-wrap: anywhere; }
+.legal-texte table.faits td a { border-bottom: 0; }
+/* Un encadré pour ce qui distingue la démonstration d'un site en production */
+.encadre { margin-top: 30px; padding: clamp(22px, 3vw, 34px); border-radius: var(--rayon-carte); background: var(--papier); }
+.encadre .etiquette { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bassin); }
+.encadre p { margin-top: 12px; }
+.encadre p:first-of-type { margin-top: 10px; }
+@media (max-width: 900px) {
+  .entete-legal > div { grid-column: 1 / -1; }
+  .entete-legal .trait { width: 100%; opacity: 0.28; -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 85%); mask-image: linear-gradient(180deg, #000 0%, transparent 85%); }
+  .sommaire { grid-column: 1 / -1; position: static; margin-bottom: 56px; }
+  .legal-texte { grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .entete-legal { padding-top: 130px; }
+  .sommaire a { padding: 13px 0; }
+  .legal-texte h2 { grid-template-columns: 1fr; gap: 10px; }
 }

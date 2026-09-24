@@ -140,7 +140,7 @@
   html += '</nav><div class="menu-pied">' +
     '<a class="menu-tel" href="tel:+33494000000">04 94 00 00 00</a>' +
     '<a class="menu-mail" href="mailto:contact@villa-semaphore.fr">contact@villa-semaphore.fr</a>' +
-    '<p class="menu-lieu">Corniche de Gigaro, La Croix-Valmer</p>' +
+    '<p class="menu-lieu">Route de Gigaro, La Croix-Valmer</p>' +
     '</div></div>';
   panneau.innerHTML = html;
   document.body.appendChild(panneau);
