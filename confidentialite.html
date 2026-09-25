@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="favicon-180.png">
-<meta name="description" content="Politique de confidentialité de la Villa Sémaphore : ce site de démonstration ne dépose aucun cookie et ne collecte aucune donnée.">
+<meta name="description" content="Politique de confidentialité de la Villa Sémaphore : ce site de démonstration ne dépose aucun cookie ; un compte créé pour l'essai ne demande qu'un nom et une adresse e-mail, effacés sous 48 heures.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Villa Sémaphore">
 <meta property="og:locale" content="fr_FR">
@@ -19,7 +19,7 @@
      donc aucune adresse IP de visiteur transmise a un tiers. -->
 <link rel="preload" href="polices/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="polices/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=15">
+<link rel="stylesheet" href="site.css?v=16">
 </head>
 <body class="page">
 
@@ -31,9 +31,10 @@
     <a href="prestations.html">Prestations</a>
     <a href="situation.html">Situation</a>
     <a href="contact.html">Contact</a>
+    <a href="reserver.html">Réserver</a>
   </nav>
   <div class="droite">
-    <a class="rond" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
+    <a class="rond moi" href="compte.html" aria-label="Mon compte"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
     <a class="rond" href="mailto:contact@villa-semaphore.fr" aria-label="Écrire"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></a>
     <a class="rond" href="situation.html" aria-label="Situation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
     <a class="tel" href="tel:+33494000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>04 94 00 00 00</span></a>
@@ -45,8 +46,8 @@
   <div>
     <span class="sur-titre">Vos données</span>
     <h1>Confidentialité</h1>
-    <p class="chapeau">Ce site ne dépose aucun cookie, ne mesure pas votre visite et ne garde rien de ce que vous tapez. Voici le détail, et ce qui changerait sur un vrai site.</p>
-    <p class="date">Dernière mise à jour : 24 septembre 2026</p>
+    <p class="chapeau">Ce site ne dépose aucun cookie et ne mesure pas votre visite. La réservation en ligne passe par deux prestataires, pour les comptes et pour le paiement. Dans la démonstration, vous pouvez l'essayer avec un compte partagé, sans rien donner de vous, ou créer le vôtre avec un nom et une adresse e-mail, effacés sous 48 heures. Voici le détail.</p>
+    <p class="date">Dernière mise à jour : 25 septembre 2026</p>
   </div>
 </section>
 
@@ -57,7 +58,7 @@
       <li><a href="#bref">En bref</a></li>
       <li><a href="#responsable">Le responsable</a></li>
       <li><a href="#collecte">Ce que le site collecte</a></li>
-      <li><a href="#hebergeur">L'hébergeur</a></li>
+      <li><a href="#prestataires">Les prestataires</a></li>
       <li><a href="#droits">Vos droits</a></li>
       <li><a href="#production">Sur un site en production</a></li>
     </ol>
@@ -67,10 +68,10 @@
     <section id="bref">
       <h2><span class="num">01</span>En bref</h2>
       <ul>
-        <li><strong>Aucun cookie</strong>, ni de mesure d'audience, ni publicitaire, ni de réseau social. C'est pour cela qu'aucun bandeau ne vous demande votre accord</li>
-        <li><strong>Aucun outil de statistiques</strong> : ni Google Analytics, ni équivalent</li>
-        <li><strong>Aucune requête vers un tiers</strong> : les polices, les images et les scripts sont servis par le site lui-même</li>
-        <li><strong>Le formulaire n'envoie rien</strong> : ce que vous y saisissez ne quitte pas votre navigateur</li>
+        <li><strong>Aucun cookie</strong> de mesure d'audience, de publicité ou de réseau social, et <strong>aucun outil de statistiques</strong>. C'est pour cela qu'aucun bandeau ne vous demande votre accord</li>
+        <li><strong>Les pages de présentation</strong> (la visite, la villa, les prestations, la situation, le contact) ne contactent aucun tiers : polices, images et scripts sont servis par le site lui-même</li>
+        <li><strong>La réservation, l'espace client et l'administration</strong> s'appuient sur Supabase, qui garde les comptes et les réservations sur des serveurs dans l'Union européenne. <strong>Le paiement</strong> se fait sur la page de Stripe</li>
+        <li><strong>Dans la démonstration, le moins possible</strong> : on peut essayer avec des comptes partagés, sans rien donner de soi. Si vous créez votre compte, seuls votre nom et votre adresse e-mail sont demandés, personne d'autre ne les voit, et ils sont <strong>effacés sous 48 heures</strong>. Les paiements sont en mode test, les réservations effacées chaque nuit</li>
       </ul>
     </section>
 
@@ -82,34 +83,45 @@
 
     <section id="collecte">
       <h2><span class="num">03</span>Ce que le site collecte</h2>
-      <h3>Le formulaire de demande</h3>
-      <p>Le formulaire de la page Contact est une démonstration. Le bouton « Envoyer la demande » affiche une réponse sur place, mais <strong>aucune donnée n'est transmise ni enregistrée</strong> : ni votre nom, ni votre adresse e-mail, ni vos dates, ni votre message. Tout s'efface quand vous quittez la page.</p>
-      <h3>Cookies et stockage du navigateur</h3>
-      <p>Le site ne dépose aucun cookie et n'écrit rien dans le stockage de votre navigateur. Il n'y a donc rien à accepter ni à refuser.</p>
-      <h3>Les liens e-mail et téléphone</h3>
-      <p>Un lien d'adresse e-mail ou de numéro de téléphone ouvre l'application de votre appareil. Le site ne sait pas si vous l'avez utilisé.</p>
-      <h3>Les liens vers d'autres sites</h3>
-      <p>Les liens vers <a href="https://weboost-studio.fr">weboost-studio.fr</a> ou <a href="https://polyhaven.com">Poly Haven</a> mènent à des sites qui ont leur propre politique de confidentialité.</p>
+      <h3>Les comptes d'essai</h3>
+      <p>Pour essayer la réservation, l'espace client ou l'administration sans rien donner de vous, connectez-vous avec l'un des deux <strong>comptes d'essai</strong> affichés sur la page de connexion. Ils sont partagés par tous les visiteurs : n'y écrivez rien de personnel, dans les notes par exemple, car d'autres visiteurs pourraient le lire avant la remise à zéro.</p>
+      <h3>Votre compte, si vous en créez un</h3>
+      <p>Vous pouvez aussi <strong>créer votre propre compte</strong>. Il demande votre nom, votre adresse e-mail et un mot de passe, rien d'autre. Il s'ouvre tout de suite : aucun e-mail ne vous est envoyé, ni pour confirmer l'adresse ni ensuite. Le compte propriétaire de la démonstration étant partagé, il est réglé pour <strong>ne jamais montrer votre nom ni votre adresse</strong> : vos réservations y occupent le planning sous le nom « Visiteur de la démo ». Seul vous les voyez en entier, dans votre espace.</p>
+      <p>Votre compte et tout ce qu'il contient sont <strong>supprimés sous 48 heures</strong>, lors de la remise à zéro de la nuit qui suit son premier jour. Ces données servent à faire fonctionner la démonstration et à rien d'autre ; la base légale est votre demande, quand vous créez le compte. Le mot de passe est conservé chiffré par Supabase, personne ne peut le lire.</p>
+      <h3>Les réservations</h3>
+      <p>Une réservation faite pendant l'essai (dates, nombre de personnes, services, mot pour la conciergerie) est enregistrée chez Supabase et <strong>effacée chaque nuit</strong> avec toutes les données de démonstration. Ses dates et ses montants apparaissent dans le compte propriétaire partagé ; le mot pour la conciergerie peut s'y lire aussi, n'y écrivez donc rien de personnel.</p>
+      <h3>Le paiement</h3>
+      <p>Le bouton de paiement vous conduit sur une page de <strong>Stripe</strong>, en mode test : aucune somme n'est débitée et seules les cartes de test sont acceptées, comme 4242 4242 4242 4242. N'y saisissez pas une vraie carte. Ce que vous tapez sur cette page est traité par Stripe ; le site ne reçoit que la confirmation du paiement et son montant.</p>
+      <h3>Le stockage du navigateur</h3>
+      <p>Quand vous vous connectez, votre navigateur garde la session dans son stockage local, pour que vous restiez connecté d'une page à l'autre. C'est un stockage strictement nécessaire au service demandé : il ne sert à rien d'autre et disparaît quand vous vous déconnectez. Le site ne dépose aucun cookie.</p>
+      <h3>Le formulaire de contact</h3>
+      <p>Le formulaire de la page Contact reste une démonstration : il affiche une réponse sur place mais <strong>n'envoie ni n'enregistre rien</strong>.</p>
     </section>
 
-    <section id="hebergeur">
-      <h2><span class="num">04</span>L'hébergeur</h2>
-      <p>Le site est hébergé par GitHub Pages, un service de <strong>GitHub, Inc.</strong>, aux États-Unis. Comme tout serveur web, celui de GitHub reçoit l'adresse IP de chaque visiteur pour lui envoyer les pages, et GitHub indique la conserver dans ses journaux <strong>pour des raisons de sécurité</strong>, que le visiteur ait un compte GitHub ou non.</p>
-      <p>Ce traitement relève de GitHub, qui en détaille la durée et les conditions de transfert hors de l'Union européenne dans sa <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">déclaration de confidentialité</a>. L'éditeur n'a pas accès à ces journaux.</p>
+    <section id="prestataires">
+      <h2><span class="num">04</span>Les prestataires</h2>
+      <table class="faits">
+        <tr><th>Hébergement des pages</th><td>GitHub Pages, GitHub, Inc., États-Unis</td></tr>
+        <tr><th>Comptes et réservations</th><td>Supabase, Inc., serveurs dans l'Union européenne (région de Paris)</td></tr>
+        <tr><th>Paiement</th><td>Stripe Payments Europe, Ltd., Dublin, Irlande</td></tr>
+      </table>
+      <p>Comme tout serveur, ceux de GitHub, de Supabase et de Stripe reçoivent l'adresse IP de votre appareil pour lui répondre, et la gardent un temps dans leurs journaux pour des raisons de sécurité. Chacun le détaille dans sa politique : <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">GitHub</a>, <a href="https://supabase.com/privacy">Supabase</a>, <a href="https://stripe.com/fr/privacy">Stripe</a>. Supabase et GitHub étant des sociétés américaines, un accès depuis les États-Unis reste possible ; il est encadré par les clauses contractuelles types de la Commission européenne.</p>
     </section>
 
     <section id="droits">
       <h2><span class="num">05</span>Vos droits</h2>
-      <p>Le règlement général sur la protection des données (RGPD) et la loi Informatique et Libertés vous donnent un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité sur les données qui vous concernent. Ce site n'en conservant aucune, une demande portera en pratique sur les journaux de l'hébergeur, que vous pouvez adresser à GitHub.</p>
+      <p>Le règlement général sur la protection des données (RGPD) et la loi Informatique et Libertés vous donnent un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité sur les données qui vous concernent. La démonstration ne gardant rien au-delà de 48 heures, vous pouvez aussi, plus simplement, attendre la remise à zéro. Pour une suppression immédiate de votre compte, ou pour une question sur les journaux des prestataires, écrivez-nous.</p>
       <p>Pour toute question, écrivez à <a href="mailto:contact@weboost-studio.fr">contact@weboost-studio.fr</a>. Vous pouvez aussi adresser une réclamation à la CNIL, sur <a href="https://www.cnil.fr">cnil.fr</a>.</p>
     </section>
 
     <section id="production">
       <h2><span class="num">06</span>Sur un site en production</h2>
-      <p>Si cette villa existait, son site recevrait de vraies demandes, et cette page dirait autre chose. Weboost Studio la rédige avec chaque client, au plus près de ce que fait son site.</p>
+      <p>Si cette villa existait, ses clients garderaient leur compte, le propriétaire verrait leurs coordonnées pour organiser le séjour, et cette page dirait autre chose. Weboost Studio la rédige avec chaque client, au plus près de ce que fait son site.</p>
       <div class="encadre">
         <span class="etiquette">Ce qui changerait</span>
-        <p><strong>Le formulaire</strong> enverrait votre demande par e-mail au propriétaire, pour y répondre et organiser votre séjour, sans l'utiliser à d'autres fins. La page dirait qui la reçoit et combien de temps elle est gardée, en général le temps de l'échange puis de la location.</p>
+        <p><strong>Les données du compte</strong> : nom, adresse e-mail, téléphone, séjours et paiements, utilisés pour la location et rien d'autre. Gardées le temps de la relation, puis archivées : les factures et le contrat, dix ans, comme le demande la loi comptable.</p>
+        <p><strong>Les e-mails</strong> de confirmation et de mot de passe partiraient du serveur de messagerie du propriétaire, qui serait nommé ici.</p>
+        <p><strong>Le paiement</strong> se ferait en mode réel chez Stripe. Le site ne verrait jamais les numéros de carte : il ne reçoit que la confirmation du paiement.</p>
         <p><strong>La mesure d'audience</strong>, si le client en veut une, serait choisie parmi les outils qui ne demandent pas de consentement, pour se passer du bandeau de cookies.</p>
       </div>
     </section>
@@ -138,6 +150,6 @@
   </div>
 </footer>
 
-<script src="site.js?v=15"></script>
+<script src="site.js?v=16"></script>
 </body>
 </html>

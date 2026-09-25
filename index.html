@@ -26,7 +26,7 @@
      donc aucune adresse IP de visiteur transmise a un tiers. -->
 <link rel="preload" href="polices/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="polices/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=15">
+<link rel="stylesheet" href="site.css?v=16">
 <style>
   :root{
     --dim:rgba(255,255,255,.62);
@@ -175,9 +175,10 @@
     <a href="prestations.html">Prestations</a>
     <a href="situation.html">Situation</a>
     <a href="contact.html">Contact</a>
+    <a href="reserver.html">Réserver</a>
   </nav>
   <div class="droite">
-    <a class="rond" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></a>
+    <a class="rond moi" href="compte.html" aria-label="Mon compte"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
     <a class="rond" href="mailto:contact@villa-semaphore.fr" aria-label="Écrire"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></a>
     <a class="rond" href="situation.html" aria-label="Situation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg></a>
     <a class="tel" href="tel:+33494000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg><span>04 94 00 00 00</span></a>
@@ -301,10 +302,10 @@
   <section class="section saisons">
     <div class="tete">
       <h2>Choisissez votre semaine</h2>
-      <p>La villa se loue à la semaine, du samedi au samedi, pour quatre personnes au plus. Les dates se demandent, nous répondons dans la journée avec la disponibilité et le tarif de la période.</p>
+      <p>La villa se loue à la semaine, du samedi au samedi, pour quatre personnes au plus. Les semaines libres et leur prix se voient en ligne, et se réservent avec un acompte de 30 %.</p>
     </div>
     <div class="cartes">
-      <a class="carte-semaine" href="contact.html">
+      <a class="carte-semaine" href="reserver.html?saison=hors">
         <div class="dessin">
           <span class="etiquette-image">Disponible</span>
           <img class="photo" src="planches/arrivee.webp" alt="L'allée de cyprès qui mène à la villa" loading="lazy">
@@ -313,7 +314,7 @@
         <div class="ligne-carte"><strong>Hors saison</strong><span>4 500 €</span></div>
         <p class="sous">Novembre à mars, la semaine</p>
       </a>
-      <a class="carte-semaine" href="contact.html">
+      <a class="carte-semaine" href="reserver.html?saison=ete">
         <div class="dessin">
           <span class="etiquette-image">Disponible</span>
           <img class="photo" src="planches/table.webp" alt="La cuisine de noyer, l'îlot et l'escalier vers les chambres" loading="lazy">
@@ -322,7 +323,7 @@
         <div class="ligne-carte"><strong>Été</strong><span>12 000 €</span></div>
         <p class="sous">Juillet et août, la semaine</p>
       </a>
-      <a class="carte-semaine" href="contact.html">
+      <a class="carte-semaine" href="reserver.html?saison=printemps">
         <div class="dessin">
           <span class="etiquette-image">Disponible</span>
           <img class="photo" src="planches/sejour.webp" alt="La pièce à vivre depuis la cuisine, les suspensions allumées" loading="lazy">
@@ -338,10 +339,10 @@
 <footer class="pied-page" data-fond="sombre">
   <div class="appel">
     <div>
-      <h2>Les dates se demandent</h2>
-      <p>Dites-nous quand vous voulez venir et combien vous serez. Nous répondons dans la journée, avec la disponibilité et le tarif de la période.</p>
+      <h2>Choisissez votre semaine</h2>
+      <p>Les semaines libres, leur prix et les services de la conciergerie : tout se choisit en ligne, l'acompte se paie par carte. Une question avant ? La conciergerie répond dans la journée.</p>
     </div>
-    <a class="bouton" href="contact.html">Demander des dates<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
+    <a class="bouton" href="reserver.html">Réserver en ligne<span class="fleche"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></span></a>
   </div>
   <div class="lignes">
     <div>
@@ -350,7 +351,7 @@
     </div>
     <div>
       <h5>Pages</h5>
-      <ul><li><a href="villa.html">La villa</a></li><li><a href="prestations.html">Prestations</a></li><li><a href="situation.html">Situation</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <ul><li><a href="villa.html">La villa</a></li><li><a href="prestations.html">Prestations</a></li><li><a href="situation.html">Situation</a></li><li><a href="contact.html">Contact</a></li><li><a href="reserver.html">Réserver</a></li></ul>
     </div>
     <div>
       <h5>Réservations</h5>
@@ -710,7 +711,7 @@
   for (var c = 0; c < PARALLEL; c++) loadNext();
 })();
 </script>
-<script src="site.js?v=15"></script>
-<script src="anime.js?v=15"></script>
+<script src="site.js?v=16"></script>
+<script src="anime.js?v=16"></script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+# Garde la base Supabase de la démo éveillée : un projet gratuit se met en
+# pause après une semaine sans requête. Chaque matin, une lecture publique
+# des tarifs, avec la clé anon du site (publique par nature), lue dans
+# app/config.js pour n'être écrite qu'à un endroit.
+#
+# Source : projects/villa-3d/github/eveil.yml dans le workspace, copiée
+# dans .github/workflows/ par publier.py.
+#
+# GitHub coupe les tâches planifiées d'un dépôt public après 60 jours sans
+# commit : une republication de la démo les relance.
+name: Réveil de la base
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  eveil:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lire les saisons de la villa
+        run: |
+          url=$(grep -oP "url: '\K[^']+" app/config.js)
+          cle=$(grep -oP "cle: '\K[^']+" app/config.js)
+          code=$(curl -s -o reponse.json -w '%{http_code}' "$url/rest/v1/saisons?select=nom&limit=1" -H "apikey: $cle")
+          echo "Supabase a répondu $code : $(cat reponse.json)"
+          test "$code" = 200

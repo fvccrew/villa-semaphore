@@ -113,7 +113,8 @@
     'villa.html': '320 m² sur la roche, la galerie',
     'prestations.html': 'Conciergerie, chef, cave',
     'situation.html': 'Gigaro, le golfe, les temps de route',
-    'contact.html': 'Demander des dates'
+    'contact.html': 'Une question, une visite',
+    'reserver.html': 'Les semaines libres, en ligne'
   };
 
   var liens = [].slice.call(nav.querySelectorAll('a'));
@@ -139,6 +140,7 @@
   });
   html += '</nav><div class="menu-pied">' +
     '<a class="menu-tel" href="tel:+33494000000">04 94 00 00 00</a>' +
+    '<a class="menu-mail" href="compte.html">Mon compte</a>' +
     '<a class="menu-mail" href="mailto:contact@villa-semaphore.fr">contact@villa-semaphore.fr</a>' +
     '<p class="menu-lieu">Route de Gigaro, La Croix-Valmer</p>' +
     '</div></div>';

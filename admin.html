@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Administration · Villa Sémaphore</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32">
+<meta name="robots" content="noindex">
+<link rel="preload" href="polices/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="polices/inter.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="site.css?v=16">
+<link rel="stylesheet" href="app/app.css?v=18">
+</head>
+<body class="app sur-clair">
+
+<header class="barre">
+  <a class="nom" href="./"><span class="pavillon" aria-hidden="true"></span>Villa Sémaphore</a>
+  <nav aria-label="Pages">
+    <a href="./">La visite</a>
+    <a href="villa.html">La villa</a>
+    <a href="prestations.html">Prestations</a>
+    <a href="situation.html">Situation</a>
+    <a href="contact.html">Contact</a>
+    <a href="reserver.html">Réserver</a>
+  </nav>
+  <div class="droite">
+    <a class="rond moi" href="admin.html" aria-label="Administration" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></a>
+  </div>
+</header>
+
+<main data-fond="clair">
+  <div id="zone"><p class="chargement">Un instant…</p></div>
+  <footer class="pied-app">
+    <span>Villa Sémaphore · administration</span>
+    <span>Une démonstration <a href="https://weboost-studio.fr">Weboost Studio</a></span>
+  </footer>
+</main>
+
+<dialog class="fenetre large" id="fiche" aria-label="Fiche">
+  <button class="fermer" type="button" aria-label="Fermer">×</button>
+  <div class="corps-fenetre" id="corps-fiche"></div>
+</dialog>
+
+<script src="site.js?v=16"></script>
+<script src="vendor/supabase.js"></script>
+<script src="app/config.js?v=17"></script>
+<script type="module" src="app/admin.js?v=18"></script>
+</body>
+</html>
