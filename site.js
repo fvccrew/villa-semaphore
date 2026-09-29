@@ -14,10 +14,12 @@
   if (h > 0) document.documentElement.style.setProperty('--ecran', h + 'px');
 
   var fonds = [].slice.call(document.querySelectorAll('[data-fond]')), surClair = false;
-  var visite = document.querySelector('.visite');
-  // Passe l'en-tete, la barre s'efface quand on descend et revient des
-  // qu'on remonte, pour ne pas passer sur les textes
-  var dernierY = scrollY, cachee = false;
+  // La barre reste toujours la (29/09 : « qu'elle soit toujours apparente,
+  // la elle disparait, pas pratique du tout »). En haut de page elle est
+  // transparente, posee sur l'image ; des qu'on descend, elle se resserre
+  // en capsule de verre depoli, lisible sur la photo comme sur le papier.
+  // Geste repris de « Header 2 » (efferd, 21st.dev), refait sans React.
+  var flottante = false;
   function fond(){
     var y = 44, quoi = '';
     for (var i = 0; i < fonds.length; i++){
@@ -26,19 +28,8 @@
     }
     var c = quoi === 'clair';
     if (c !== surClair){ surClair = c; document.body.classList.toggle('sur-clair', surClair); }
-    // Le dernier ecran de la visite remonte avec la page et passe
-    // derriere la barre : sur telephone, le titre et la pilule finissaient
-    // dans les pilules du haut. On efface la barre pendant le passage.
-    var passage = false;
-    if (visite){
-      var v = visite.getBoundingClientRect();
-      passage = v.bottom < innerHeight - 8 && v.bottom > -80;
-    }
-    var cache = passage || (quoi !== '' && scrollY > dernierY + 4);
-    var montre = !passage && (scrollY < dernierY - 4 || quoi === '');
-    if (cache && !cachee){ cachee = true; document.body.classList.add('barre-cachee'); }
-    else if (montre && cachee){ cachee = false; document.body.classList.remove('barre-cachee'); }
-    if (Math.abs(scrollY - dernierY) > 4) dernierY = scrollY;
+    var f = scrollY > 40;
+    if (f !== flottante){ flottante = f; document.body.classList.toggle('barre-flottante', f); }
   }
   if (fonds.length){ addEventListener('scroll', fond, { passive: true }); addEventListener('resize', fond); fond(); }
 

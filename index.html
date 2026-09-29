@@ -26,7 +26,7 @@
      donc aucune adresse IP de visiteur transmise a un tiers. -->
 <link rel="preload" href="polices/instrument-serif.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="polices/inter.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="site.css?v=16">
+<link rel="stylesheet" href="site.css?v=17">
 <style>
   :root{
     --dim:rgba(255,255,255,.62);
@@ -75,7 +75,8 @@
   .beat h2 em{ font-style:italic; color:#fff; transition:color .8s }
   .beat p{
     max-width:36ch; margin-top:16px; line-height:1.6; font-size:clamp(.9rem,1.3vw,1rem);
-    color:rgba(255,255,255,.86); text-shadow:0 2px 24px rgba(0,0,0,.8); transition:color .8s, text-shadow .8s;
+    /* L'ombre serree tient le texte sur la table blanche et la mer claire */
+    color:rgba(255,255,255,.9); text-shadow:0 1px 3px rgba(0,0,0,.45), 0 2px 24px rgba(0,0,0,.8); transition:color .8s, text-shadow .8s;
   }
   .beat .bouton{ pointer-events:auto; margin-top:28px; background:#fff; border-color:#fff; color:var(--encre) }
   .beat .bouton:hover{ background:#e9e7e2; border-color:#e9e7e2 }
@@ -394,7 +395,8 @@
   // d'images de 720 px (tel-images.py). Le decodage d'une image de 1280 px
   // coute trois fois plus cher, et c'est ce cout, paye a chaque nouvelle
   // image, qui hachait le defilement.
-  var TEL = innerWidth <= 760 && !PARAMS.get('brut');
+  // `?hd=1` force le jeu du bureau : pour filmer l'ecran d'un telephone en 1080
+  var TEL = innerWidth <= 760 && !PARAMS.get('brut') && !PARAMS.get('hd');
   var DIR   = PARAMS.get('brut') ? 'images-brut/' : (TEL ? 'images-tel/' : 'images/');
   var EXT   = '.webp';
   var SKETCH = 88;          // croquis disponibles, du depart a l'allee
@@ -655,7 +657,6 @@
     return shown;
   }
 
-  var papier = true;
   function render(p){
     var i = pick(p), ph = phases(p);
     if (i > 0) draw(i, ph);
@@ -667,8 +668,10 @@
       // Les liens d'un ecran efface ne doivent pas rester cliquables
       beats[k].style.visibility = o > 0.02 ? 'visible' : 'hidden';
     }
+    // On lit la classe reelle : site.js peut l'avoir retiree (mouvement
+    // reduit), et le texte restait blanc sur le croquis
     var feuille = ph.c < 0.5;
-    if (feuille !== papier){ papier = feuille; document.body.classList.toggle('papier', papier); }
+    if (feuille !== document.body.classList.contains('papier')) document.body.classList.toggle('papier', feuille);
   }
 
   function start(){
@@ -692,9 +695,17 @@
     readScroll();
     if (!isNaN(y)) eased = target;
 
+    // Mouvement reduit : pas de lissage, la visite suit le defilement tel
+    // quel. Sans ce rendu au defilement, elle restait figee sur sa premiere
+    // image pour tous ceux qui ont reduit les animations de leur telephone.
     if (reduce){
       eased = target;
       render(eased);
+      addEventListener('scroll', function(){
+        eased = target;
+        render(eased);
+        prog.style.width = Math.round(eased * 100) + '%';
+      }, { passive: true });
       return;
     }
 
@@ -711,7 +722,7 @@
   for (var c = 0; c < PARALLEL; c++) loadNext();
 })();
 </script>
-<script src="site.js?v=16"></script>
+<script src="site.js?v=17"></script>
 <script src="anime.js?v=16"></script>
 </body>
 </html>
